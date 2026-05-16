@@ -64,6 +64,21 @@ LOCALE_MAP: dict[str, CookidooLocalizationConfig] = {
         language="ru-RU",
         url="https://cookidoo.ru/foundation/ru-RU",
     ),
+    "no": CookidooLocalizationConfig(
+        country_code="no",
+        language="en",
+        url="https://cookidoo.international/foundation/en",
+    ),
+    "se": CookidooLocalizationConfig(
+        country_code="se",
+        language="en",
+        url="https://cookidoo.international/foundation/en",
+    ),
+    "dk": CookidooLocalizationConfig(
+        country_code="dk",
+        language="en",
+        url="https://cookidoo.international/foundation/en",
+    ),
 }
 
 

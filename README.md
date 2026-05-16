@@ -51,7 +51,7 @@ cp .env.example .env
 ```
 COOKIDOO_EMAIL=your@email.com
 COOKIDOO_PASSWORD=yourpassword
-COOKIDOO_LOCALE=en-US   # Options: en-US, pl, en-GB, de-DE, fr-FR, es-ES, it-IT, nl-NL, pt-PT, ru-RU
+COOKIDOO_LOCALE=en-US   # Options: en-US, pl, en-GB, de-DE, fr-FR, es-ES, it-IT, nl-NL, pt-PT, ru-RU, no, se, dk
 ```
 
 ### Run the server
