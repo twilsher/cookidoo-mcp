@@ -18,7 +18,7 @@ if grep -q "=" "$SECRET_FILE"; then
   source "$SECRET_FILE"
   set +a
 else
-  export COOKIDOO_EMAIL="${COOKIDOO_EMAIL:-vlwilsher@gmail.com}"
+  export COOKIDOO_EMAIL="${COOKIDOO_EMAIL:-thomas.wilsher@gmail.com}"
   export COOKIDOO_PASSWORD="$(tr -d '\n\r' < "$SECRET_FILE")"
 fi
 

@@ -78,7 +78,7 @@ COOKIDOO_LOCALE=en-US
 ```
 
 or a single-line password file, in which case the launcher defaults
-`COOKIDOO_EMAIL` to `vlwilsher@gmail.com` and `COOKIDOO_LOCALE` to `en-US`.
+`COOKIDOO_EMAIL` to `thomas.wilsher@gmail.com` and `COOKIDOO_LOCALE` to `en-US`.
 
 Claude Code registration entry:
 
