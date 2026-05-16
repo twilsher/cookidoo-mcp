@@ -60,6 +60,38 @@ COOKIDOO_LOCALE=en-US   # Options: en-US, pl, en-GB, de-DE, fr-FR, es-ES, it-IT,
 uv run python -m cookidoo_mcp
 ```
 
+### Local launcher
+
+For Claude Code, install/use the local launcher:
+
+```bash
+~/.local/bin/cookidoo-mcp-server
+```
+
+It reads credentials from `~/.secrets/cookidoo`. The file can either be a shell
+env file:
+
+```bash
+COOKIDOO_EMAIL=you@example.com
+COOKIDOO_PASSWORD=yourpassword
+COOKIDOO_LOCALE=en-US
+```
+
+or a single-line password file, in which case the launcher defaults
+`COOKIDOO_EMAIL` to `vlwilsher@gmail.com` and `COOKIDOO_LOCALE` to `en-US`.
+
+Claude Code registration entry:
+
+```json
+{
+  "mcpServers": {
+    "cookidoo": {
+      "command": "/Users/twilsher/.local/bin/cookidoo-mcp-server"
+    }
+  }
+}
+```
+
 ---
 
 ## Claude Desktop integration

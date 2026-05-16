@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+from enum import StrEnum
 from typing import Any
 
 from dotenv import load_dotenv
+from mcp.types import ToolAnnotations
 from mcp.server.fastmcp import FastMCP
 
 from cookidoo_mcp.client import CookidooClient
@@ -16,6 +18,24 @@ load_dotenv()
 mcp = FastMCP("cookidoo", dependencies=["cookidoo-api", "python-dotenv", "aiohttp"])
 
 _client = CookidooClient.get()
+
+READ_ONLY_TOOL_ANNOTATIONS = ToolAnnotations(
+    readOnlyHint=True,
+    destructiveHint=False,
+    idempotentHint=True,
+)
+MUTATION_TOOL_ANNOTATIONS = ToolAnnotations(
+    readOnlyHint=False,
+    destructiveHint=True,
+    idempotentHint=False,
+)
+
+
+class HttpMethod(StrEnum):
+    GET = "GET"
+    POST = "POST"
+    PATCH = "PATCH"
+    DELETE = "DELETE"
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -46,12 +66,138 @@ def _parse_date(date_str: str | None) -> date:
     return datetime.fromisoformat(date_str).date()
 
 
+def _require_confirmed(confirmed: bool) -> None:
+    if confirmed is not True:
+        raise RuntimeError(
+            "This Cookidoo mutation tool requires confirmed=true after explicit user approval."
+        )
+
+
+def _format_recipe_summary(recipe: Any) -> dict[str, Any]:
+    return {
+        "id": recipe.id,
+        "name": _sanitize(recipe.name),
+        "url": recipe.url,
+        "total_time_seconds": recipe.total_time,
+        "thumbnail": recipe.thumbnail,
+    }
+
+
+def _format_calendar_day(day: Any) -> dict[str, Any]:
+    return {
+        "id": day.id,
+        "title": _sanitize(day.title),
+        "recipes": [_format_recipe_summary(recipe) for recipe in day.recipes],
+    }
+
+
+def _format_ingredient(ingredient: Any) -> dict[str, Any]:
+    return {
+        "id": ingredient.id,
+        "name": _sanitize(ingredient.name),
+        "description": _sanitize(ingredient.description),
+    }
+
+
+def _format_shopping_item(item: Any) -> dict[str, Any]:
+    return {
+        "id": item.id,
+        "name": _sanitize(item.name),
+        "description": _sanitize(item.description),
+        "is_owned": item.is_owned,
+    }
+
+
+def _recipe_path(language: str, recipe_id: str) -> str:
+    return f"recipes/recipe/{language}/{recipe_id}"
+
+
+async def _get_raw_recipe(recipe_id: str) -> dict[str, Any]:
+    api = await _client.api()
+    raw = await _client.raw_request(
+        "GET",
+        _recipe_path(api.localization.language, recipe_id),
+    )
+    body = raw["body"]
+    if not isinstance(body, dict):
+        raise RuntimeError("Cookidoo recipe details response was not JSON.")
+    return body
+
+
+def _format_steps(raw_recipe: dict[str, Any]) -> list[dict[str, Any]]:
+    steps: list[dict[str, Any]] = []
+    for group_index, group in enumerate(raw_recipe.get("recipeStepGroups", []), start=1):
+        group_title = _sanitize(str(group.get("title") or ""))
+        for step_index, step in enumerate(group.get("recipeSteps", []), start=1):
+            steps.append(
+                {
+                    "group_index": group_index,
+                    "group_title": group_title,
+                    "step_index": step_index,
+                    "title": _sanitize(str(step.get("title") or "")),
+                    "text": _sanitize(str(step.get("formattedText") or "")),
+                }
+            )
+    return steps
+
+
+async def _get_recipe_payload(recipe_id: str) -> dict[str, Any]:
+    api = await _client.api()
+    details = await api.get_recipe_details(recipe_id)
+    raw_recipe = await _get_raw_recipe(recipe_id)
+    return {
+        "id": details.id,
+        "name": _sanitize(details.name),
+        "url": details.url,
+        "difficulty": details.difficulty,
+        "active_time_seconds": details.active_time,
+        "total_time_seconds": details.total_time,
+        "serving_size": details.serving_size,
+        "thumbnail": details.thumbnail,
+        "notes": [_sanitize(n) for n in details.notes],
+        "utensils": [_sanitize(u) for u in details.utensils],
+        "categories": [
+            {"id": c.id, "name": _sanitize(c.name), "notes": _sanitize(c.notes)}
+            for c in details.categories
+        ],
+        "collections": [
+            {"id": c.id, "name": _sanitize(c.name), "total_recipes": c.total_recipes}
+            for c in details.collections
+        ],
+        "ingredients": [_format_ingredient(i) for i in details.ingredients],
+        "nutrition_groups": [
+            {
+                "name": _sanitize(ng.name),
+                "entries": [
+                    {
+                        "quantity": rn.quantity,
+                        "unit": _sanitize(rn.unit_notation),
+                        "nutritions": [
+                            {
+                                "type": _sanitize(n.type),
+                                "number": n.number,
+                                "unit": _sanitize(n.unittype),
+                            }
+                            for n in rn.nutritions
+                        ],
+                    }
+                    for rn in ng.recipe_nutritions
+                ],
+            }
+            for ng in details.nutrition_groups
+        ],
+        "steps": _format_steps(raw_recipe),
+    }
+
+
 # ---------------------------------------------------------------------------
-# Priority 1 — Recipe Search
+# Priority tools
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
-async def search_recipes(query: str, max_results: int = 10) -> list[dict[str, Any]]:
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
+async def cookidoo_search_recipes(
+    query: str, max_results: int = 10
+) -> list[dict[str, Any]]:
     """Search Cookidoo recipes by name, ingredient, or cuisine.
 
     Args:
@@ -82,7 +228,7 @@ async def search_recipes(query: str, max_results: int = 10) -> list[dict[str, An
         recipe_id = item.get("id", "")
         name = _sanitize(item.get("title") or item.get("name") or "")
         assets = item.get("descriptiveAssets") or []
-        thumbnail, image = _pick_image(assets)
+        thumbnail, _image = _pick_image(assets)
         total_time = item.get("totalTime") or item.get("total_time")
         recipe_url = f"{base_url}/recipes/recipe/{lang}/{recipe_id}"
         results.append({
@@ -96,129 +242,150 @@ async def search_recipes(query: str, max_results: int = 10) -> list[dict[str, An
     return results
 
 
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
+async def cookidoo_get_recipe(recipe_id: str) -> dict[str, Any]:
+    """Get a Cookidoo recipe by ID, including ingredients and preparation steps.
+
+    Args:
+        recipe_id: The Cookidoo recipe ID (e.g. "r907001").
+    """
+    return await _get_recipe_payload(recipe_id)
+
+
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
+async def cookidoo_get_shopping_list() -> list[dict[str, Any]]:
+    """Get the current Cookidoo shopping list items."""
+    api = await _client.api()
+    items = await api.get_ingredient_items()
+    return [_format_shopping_item(item) for item in items]
+
+
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
+async def cookidoo_get_my_week(
+    weeks: int = 2, start_date: str = ""
+) -> list[dict[str, Any]]:
+    """Get planned Cookidoo recipes for upcoming calendar weeks.
+
+    Args:
+        weeks: Number of upcoming weeks to return, including the current week (default 2, max 8).
+        start_date: Optional ISO date to start from. Defaults to today.
+    """
+    api = await _client.api()
+    start = _parse_date(start_date or None)
+    week_count = min(max(1, weeks), 8)
+
+    planned_weeks = []
+    for offset in range(week_count):
+        target = start + timedelta(weeks=offset)
+        week_start = target - timedelta(days=target.weekday())
+        days = await api.get_recipes_in_calendar_week(target)
+        planned_weeks.append(
+            {
+                "week_start": week_start.isoformat(),
+                "week_end": (week_start + timedelta(days=6)).isoformat(),
+                "days": [_format_calendar_day(day) for day in days],
+            }
+        )
+
+    return planned_weeks
+
+
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def cookidoo_http_request(
+    method: HttpMethod,
+    path: str,
+    body: dict[str, Any] | None = None,
+    query: dict[str, Any] | None = None,
+    confirmed: bool = False,
+) -> dict[str, Any]:
+    """Execute a raw Cookidoo API request with the stored session.
+
+    Non-GET requests require confirmed=true after explicit user approval.
+    Use relative API paths, e.g. "shopping/en-US" or "planning/en-US/api/my-week/2026-05-16".
+    """
+    if method != HttpMethod.GET:
+        _require_confirmed(confirmed)
+
+    return await _client.raw_request(
+        method.value,
+        path,
+        body=body,
+        query=query,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Backwards-compatible tools
+# ---------------------------------------------------------------------------
+
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
+async def search_recipes(query: str, max_results: int = 10) -> list[dict[str, Any]]:
+    """Search Cookidoo recipes by name, ingredient, or cuisine.
+
+    Args:
+        query: Free-text search term (e.g. "pasta tomato", "chicken curry", "gluten free cake").
+        max_results: Maximum number of results to return (default 10, max 50).
+    """
+    return await cookidoo_search_recipes(query, max_results)
+
+
 # ---------------------------------------------------------------------------
 # Priority 2 — Recipe Details & Shopping List
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 async def get_recipe_details(recipe_id: str) -> dict[str, Any]:
     """Get full details for a recipe: ingredients, timing, nutrition, categories, difficulty.
 
     Args:
         recipe_id: The Cookidoo recipe ID (e.g. "r907001").
     """
-    api = await _client.api()
-    details = await api.get_recipe_details(recipe_id)
-    return {
-        "id": details.id,
-        "name": _sanitize(details.name),
-        "url": details.url,
-        "difficulty": details.difficulty,
-        "active_time_seconds": details.active_time,
-        "total_time_seconds": details.total_time,
-        "serving_size": details.serving_size,
-        "thumbnail": details.thumbnail,
-        "notes": [_sanitize(n) for n in details.notes],
-        "utensils": [_sanitize(u) for u in details.utensils],
-        "categories": [
-            {"id": c.id, "name": _sanitize(c.name), "notes": _sanitize(c.notes)}
-            for c in details.categories
-        ],
-        "collections": [
-            {"id": c.id, "name": _sanitize(c.name), "total_recipes": c.total_recipes}
-            for c in details.collections
-        ],
-        "ingredients": [
-            {
-                "id": i.id,
-                "name": _sanitize(i.name),
-                "description": _sanitize(i.description),
-            }
-            for i in details.ingredients
-        ],
-        "nutrition_groups": [
-            {
-                "name": _sanitize(ng.name),
-                "entries": [
-                    {
-                        "quantity": rn.quantity,
-                        "unit": _sanitize(rn.unit_notation),
-                        "nutritions": [
-                            {
-                                "type": _sanitize(n.type),
-                                "number": n.number,
-                                "unit": _sanitize(n.unittype),
-                            }
-                            for n in rn.nutritions
-                        ],
-                    }
-                    for rn in ng.recipe_nutritions
-                ],
-            }
-            for ng in details.nutrition_groups
-        ],
-    }
+    return await _get_recipe_payload(recipe_id)
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 async def get_shopping_list() -> list[dict[str, Any]]:
     """Get the current shopping list — all ingredient items with quantities and ownership status."""
-    api = await _client.api()
-    items = await api.get_ingredient_items()
-    return [
-        {
-            "id": item.id,
-            "name": _sanitize(item.name),
-            "description": _sanitize(item.description),
-            "is_owned": item.is_owned,
-        }
-        for item in items
-    ]
+    return await cookidoo_get_shopping_list()
 
 
-@mcp.tool()
-async def add_to_shopping_list(recipe_ids: list[str]) -> list[dict[str, Any]]:
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def add_to_shopping_list(
+    recipe_ids: list[str], confirmed: bool = False
+) -> list[dict[str, Any]]:
     """Add recipe ingredients to the shopping list.
 
     Args:
         recipe_ids: List of Cookidoo recipe IDs whose ingredients to add.
+        confirmed: Must be true after explicit user approval.
     """
+    _require_confirmed(confirmed)
     api = await _client.api()
     items = await api.add_ingredient_items_for_recipes(recipe_ids)
-    return [
-        {
-            "id": item.id,
-            "name": _sanitize(item.name),
-            "description": _sanitize(item.description),
-            "is_owned": item.is_owned,
-        }
-        for item in items
-    ]
+    return [_format_shopping_item(item) for item in items]
 
 
-@mcp.tool()
-async def remove_from_shopping_list(recipe_ids: list[str]) -> list[dict[str, Any]]:
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def remove_from_shopping_list(
+    recipe_ids: list[str], confirmed: bool = False
+) -> list[dict[str, Any]]:
     """Remove recipe ingredients from the shopping list.
 
     Args:
         recipe_ids: List of Cookidoo recipe IDs whose ingredients to remove.
+        confirmed: Must be true after explicit user approval.
     """
+    _require_confirmed(confirmed)
     api = await _client.api()
-    items = await api.remove_ingredient_items_for_recipes(recipe_ids)
-    return [
-        {
-            "id": item.id,
-            "name": _sanitize(item.name),
-            "description": _sanitize(item.description),
-            "is_owned": item.is_owned,
-        }
-        for item in items
-    ]
+    await api.remove_ingredient_items_for_recipes(recipe_ids)
+    items = await api.get_ingredient_items()
+    return [_format_shopping_item(item) for item in items]
 
 
-@mcp.tool()
-async def clear_shopping_list() -> dict[str, str]:
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def clear_shopping_list(confirmed: bool = False) -> dict[str, str]:
     """Wipe the entire shopping list (removes all ingredient items)."""
+    _require_confirmed(confirmed)
     api = await _client.api()
     await api.clear_shopping_list()
     return {"status": "ok", "message": "Shopping list cleared."}
@@ -228,7 +395,7 @@ async def clear_shopping_list() -> dict[str, str]:
 # Priority 3 — Meal Calendar
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 async def get_calendar_week(date: str = "") -> list[dict[str, Any]]:
     """View the meal plan for the week containing the given date.
 
@@ -238,74 +405,40 @@ async def get_calendar_week(date: str = "") -> list[dict[str, Any]]:
     api = await _client.api()
     target = _parse_date(date or None)
     days = await api.get_recipes_in_calendar_week(target)
-    return [
-        {
-            "id": day.id,
-            "title": _sanitize(day.title),
-            "recipes": [
-                {
-                    "id": r.id,
-                    "name": _sanitize(r.name),
-                    "url": r.url,
-                    "total_time_seconds": r.total_time,
-                    "thumbnail": r.thumbnail,
-                }
-                for r in day.recipes
-            ],
-        }
-        for day in days
-    ]
+    return [_format_calendar_day(day) for day in days]
 
 
-@mcp.tool()
-async def add_to_calendar(recipe_ids: list[str], date: str) -> dict[str, Any]:
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def add_to_calendar(
+    recipe_ids: list[str], date: str, confirmed: bool = False
+) -> dict[str, Any]:
     """Schedule recipes for a specific day in the meal calendar.
 
     Args:
         recipe_ids: List of Cookidoo recipe IDs to add.
         date: ISO date string for the target day (e.g. "2025-03-15").
+        confirmed: Must be true after explicit user approval.
     """
+    _require_confirmed(confirmed)
     api = await _client.api()
     target = _parse_date(date)
     day = await api.add_recipes_to_calendar(target, recipe_ids)
-    return {
-        "id": day.id,
-        "title": _sanitize(day.title),
-        "recipes": [
-            {
-                "id": r.id,
-                "name": _sanitize(r.name),
-                "url": r.url,
-                "total_time_seconds": r.total_time,
-                "thumbnail": r.thumbnail,
-            }
-            for r in day.recipes
-        ],
-    }
+    return _format_calendar_day(day)
 
 
-@mcp.tool()
-async def remove_from_calendar(recipe_id: str, date: str) -> dict[str, Any]:
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def remove_from_calendar(
+    recipe_id: str, date: str, confirmed: bool = False
+) -> dict[str, Any]:
     """Remove a recipe from a specific day in the meal calendar.
 
     Args:
         recipe_id: The Cookidoo recipe ID to remove.
         date: ISO date string for the target day (e.g. "2025-03-15").
+        confirmed: Must be true after explicit user approval.
     """
+    _require_confirmed(confirmed)
     api = await _client.api()
     target = _parse_date(date)
     day = await api.remove_recipe_from_calendar(target, recipe_id)
-    return {
-        "id": day.id,
-        "title": _sanitize(day.title),
-        "recipes": [
-            {
-                "id": r.id,
-                "name": _sanitize(r.name),
-                "url": r.url,
-                "total_time_seconds": r.total_time,
-                "thumbnail": r.thumbnail,
-            }
-            for r in day.recipes
-        ],
-    }
+    return _format_calendar_day(day)

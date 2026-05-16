@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+
+SECRET_FILE="${COOKIDOO_SECRET_FILE:-$HOME/.secrets/cookidoo}"
+PROJECT_DIR="/Users/twilsher/dev/cookidoo-mcp"
+
+if [[ ! -r "$SECRET_FILE" ]]; then
+  echo "Missing readable Cookidoo credentials file: $SECRET_FILE" >&2
+  exit 1
+fi
+
+if grep -q "=" "$SECRET_FILE"; then
+  set -a
+  # Supported env-file format:
+  #   COOKIDOO_EMAIL=you@example.com
+  #   COOKIDOO_PASSWORD=...
+  #   COOKIDOO_LOCALE=en-US
+  source "$SECRET_FILE"
+  set +a
+else
+  export COOKIDOO_EMAIL="${COOKIDOO_EMAIL:-vlwilsher@gmail.com}"
+  export COOKIDOO_PASSWORD="$(tr -d '\n\r' < "$SECRET_FILE")"
+fi
+
+: "${COOKIDOO_EMAIL:?COOKIDOO_EMAIL must be set in $SECRET_FILE}"
+: "${COOKIDOO_PASSWORD:?COOKIDOO_PASSWORD must be set in $SECRET_FILE}"
+export COOKIDOO_LOCALE="${COOKIDOO_LOCALE:-en-US}"
+
+exec "$PROJECT_DIR/.venv/bin/python" -m cookidoo_mcp

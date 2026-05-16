@@ -3,14 +3,11 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING
+from typing import Any
 
 import aiohttp
 from cookidoo_api import Cookidoo
 from cookidoo_api.types import CookidooConfig, CookidooLocalizationConfig
-
-if TYPE_CHECKING:
-    pass
 
 # Supported locales — extend as needed
 LOCALE_MAP: dict[str, CookidooLocalizationConfig] = {
@@ -64,6 +61,21 @@ LOCALE_MAP: dict[str, CookidooLocalizationConfig] = {
         language="ru-RU",
         url="https://cookidoo.ru/foundation/ru-RU",
     ),
+    "no": CookidooLocalizationConfig(
+        country_code="no",
+        language="en",
+        url="https://cookidoo.international/foundation/en",
+    ),
+    "se": CookidooLocalizationConfig(
+        country_code="se",
+        language="en",
+        url="https://cookidoo.international/foundation/en",
+    ),
+    "dk": CookidooLocalizationConfig(
+        country_code="dk",
+        language="en",
+        url="https://cookidoo.international/foundation/en",
+    ),
 }
 
 
@@ -99,7 +111,14 @@ class CookidooClient:
 
             self._session = aiohttp.ClientSession()
             self._api = Cookidoo(self._session, cfg)
-            auth = await self._api.login()
+            try:
+                auth = await self._api.login()
+            except Exception:
+                await self.close()
+                self._api = None
+                self._session = None
+                raise
+
             self._api.auth_data = auth
             return self._api
 
@@ -109,7 +128,13 @@ class CookidooClient:
                 auth = await self._api.refresh_token()
             except Exception:
                 # Fall back to full re-login
-                auth = await self._api.login()
+                try:
+                    auth = await self._api.login()
+                except Exception:
+                    await self.close()
+                    self._api = None
+                    self._session = None
+                    raise
             self._api.auth_data = auth
 
         return self._api
@@ -117,6 +142,40 @@ class CookidooClient:
     async def api(self) -> Cookidoo:
         """Get an authenticated Cookidoo API instance."""
         return await self._ensure_authenticated()
+
+    async def raw_request(
+        self,
+        method: str,
+        path: str,
+        *,
+        body: dict[str, Any] | None = None,
+        query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Execute an authenticated request against the localized Cookidoo API."""
+        api = await self.api()
+        relative_path = path.lstrip("/")
+        url = api.api_endpoint / relative_path
+
+        async with api._session.request(
+            method.upper(),
+            url,
+            headers=api._api_headers,
+            json=body,
+            params=query,
+        ) as response:
+            response.raise_for_status()
+
+            content_type = response.headers.get("content-type", "")
+            if "application/json" in content_type:
+                data: Any = await response.json()
+            else:
+                data = await response.text()
+
+            return {
+                "status": response.status,
+                "url": str(response.url),
+                "body": data,
+            }
 
     async def close(self) -> None:
         if self._session and not self._session.closed:
