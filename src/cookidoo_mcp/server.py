@@ -60,6 +60,19 @@ def _pick_image(assets: list[dict[str, Any]]) -> tuple[str | None, str | None]:
     return None, None
 
 
+_STANDARD_RECIPE_ID_RE = re.compile(r"^r\d+$")
+
+
+def _is_custom_recipe_id(recipe_id: str) -> bool:
+    """Cookidoo has two recipe-ID shapes routed to different calendar endpoints.
+
+    Standard catalog recipes use `r` + digits (e.g. `r150903`); custom (user-created)
+    recipes use a 26-char ULID (e.g. `01KRRK46H63Z0BSN5ZP2Y99P2W`). The two require
+    different API methods to add/remove from the meal calendar.
+    """
+    return not _STANDARD_RECIPE_ID_RE.match(recipe_id)
+
+
 def _parse_date(date_str: str | None) -> date:
     if not date_str:
         return date.today()
@@ -422,7 +435,15 @@ async def add_to_calendar(
     _require_confirmed(confirmed)
     api = await _client.api()
     target = _parse_date(date)
-    day = await api.add_recipes_to_calendar(target, recipe_ids)
+
+    standard_ids = [rid for rid in recipe_ids if not _is_custom_recipe_id(rid)]
+    custom_ids = [rid for rid in recipe_ids if _is_custom_recipe_id(rid)]
+
+    day = None
+    if standard_ids:
+        day = await api.add_recipes_to_calendar(target, standard_ids)
+    if custom_ids:
+        day = await api.add_custom_recipes_to_calendar(target, custom_ids)
     return _format_calendar_day(day)
 
 
@@ -440,5 +461,8 @@ async def remove_from_calendar(
     _require_confirmed(confirmed)
     api = await _client.api()
     target = _parse_date(date)
-    day = await api.remove_recipe_from_calendar(target, recipe_id)
+    if _is_custom_recipe_id(recipe_id):
+        day = await api.remove_custom_recipe_from_calendar(target, recipe_id)
+    else:
+        day = await api.remove_recipe_from_calendar(target, recipe_id)
     return _format_calendar_day(day)
