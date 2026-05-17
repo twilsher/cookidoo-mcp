@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import re
 from datetime import date, datetime, timedelta
 from enum import StrEnum
@@ -96,12 +97,60 @@ def _format_recipe_summary(recipe: Any) -> dict[str, Any]:
     }
 
 
-def _format_calendar_day(day: Any) -> dict[str, Any]:
+def _format_calendar_day(
+    day: Any, extra_recipes: list[Any] | None = None
+) -> dict[str, Any]:
+    recipes = [_format_recipe_summary(recipe) for recipe in day.recipes]
+    if extra_recipes:
+        recipes.extend(_format_recipe_summary(r) for r in extra_recipes)
     return {
         "id": day.id,
         "title": _sanitize(day.title),
-        "recipes": [_format_recipe_summary(recipe) for recipe in day.recipes],
+        "recipes": recipes,
     }
+
+
+async def _fetch_custom_recipe_ids_for_week(target: date) -> dict[str, list[str]]:
+    """Read the raw my-week response and return {dayKey: [custom_ulid, ...]}.
+
+    The cookidoo-api library's CookidooCalendarDay dataclass drops the
+    customerRecipeIds field, so to surface custom recipes in the meal plan we
+    have to hit the raw endpoint ourselves.
+    """
+    api = await _client.api()
+    language = api._cfg.localization.language
+    path = f"planning/{language}/api/my-week/{target.isoformat()}"
+    response = await _client.raw_request("GET", path)
+    body = response.get("body") or {}
+    days = body.get("myDays", []) if isinstance(body, dict) else []
+    out: dict[str, list[str]] = {}
+    for day in days:
+        if not isinstance(day, dict):
+            continue
+        day_key = day.get("dayKey")
+        custom_ids = day.get("customerRecipeIds") or []
+        if day_key and custom_ids:
+            out[day_key] = list(custom_ids)
+    return out
+
+
+async def _fetch_custom_recipes(custom_ids: set[str]) -> dict[str, Any]:
+    """Fetch each custom recipe by ID and return {id: CookidooCustomRecipe}.
+
+    Skips any IDs the lookup can't resolve (deleted recipe, transient error).
+    """
+    if not custom_ids:
+        return {}
+    api = await _client.api()
+    results = await asyncio.gather(
+        *(api.get_custom_recipe(rid) for rid in custom_ids),
+        return_exceptions=True,
+    )
+    out: dict[str, Any] = {}
+    for rid, result in zip(custom_ids, results):
+        if not isinstance(result, BaseException):
+            out[rid] = result
+    return out
 
 
 def _format_ingredient(ingredient: Any) -> dict[str, Any]:
@@ -291,12 +340,27 @@ async def cookidoo_get_my_week(
     for offset in range(week_count):
         target = start + timedelta(weeks=offset)
         week_start = target - timedelta(days=target.weekday())
-        days = await api.get_recipes_in_calendar_week(target)
+        days, custom_ids_by_day = await asyncio.gather(
+            api.get_recipes_in_calendar_week(target),
+            _fetch_custom_recipe_ids_for_week(target),
+        )
+        all_custom_ids = {rid for ids in custom_ids_by_day.values() for rid in ids}
+        custom_recipes = await _fetch_custom_recipes(all_custom_ids)
         planned_weeks.append(
             {
                 "week_start": week_start.isoformat(),
                 "week_end": (week_start + timedelta(days=6)).isoformat(),
-                "days": [_format_calendar_day(day) for day in days],
+                "days": [
+                    _format_calendar_day(
+                        day,
+                        extra_recipes=[
+                            custom_recipes[rid]
+                            for rid in custom_ids_by_day.get(day.id, [])
+                            if rid in custom_recipes
+                        ],
+                    )
+                    for day in days
+                ],
             }
         )
 
@@ -417,8 +481,23 @@ async def get_calendar_week(date: str = "") -> list[dict[str, Any]]:
     """
     api = await _client.api()
     target = _parse_date(date or None)
-    days = await api.get_recipes_in_calendar_week(target)
-    return [_format_calendar_day(day) for day in days]
+    days, custom_ids_by_day = await asyncio.gather(
+        api.get_recipes_in_calendar_week(target),
+        _fetch_custom_recipe_ids_for_week(target),
+    )
+    all_custom_ids = {rid for ids in custom_ids_by_day.values() for rid in ids}
+    custom_recipes = await _fetch_custom_recipes(all_custom_ids)
+    return [
+        _format_calendar_day(
+            day,
+            extra_recipes=[
+                custom_recipes[rid]
+                for rid in custom_ids_by_day.get(day.id, [])
+                if rid in custom_recipes
+            ],
+        )
+        for day in days
+    ]
 
 
 @mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
