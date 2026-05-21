@@ -264,26 +264,34 @@ async def cookidoo_search_recipes(
 
     Args:
         query: Free-text search term (e.g. "pasta tomato", "chicken curry", "gluten free cake").
-        max_results: Maximum number of results to return (default 10, max 50).
+        max_results: Maximum number of results to return (default 10). The
+            server returns at most 20 results per call regardless of this value.
     """
     api = await _client.api()
 
     lang = _search_locale(api.localization.language)
-    url = api.api_endpoint / f"search/{lang}"
+    # The mobile API host (api.api_endpoint) exposes /search/<lang>, but it
+    # returns matches from an unfiltered global pool — empty results for many
+    # queries and cross-language noise (e.g. Czech soups for "korean pork").
+    # The public web host serves the same path with the locale filter applied,
+    # matching what users see at cookidoo.international/search/<lang>.
+    base_url = api.localization.url.rsplit("/foundation/", 1)[0]
+    url = f"{base_url}/search/{lang}"
 
     headers = dict(api._api_headers)
     if api._auth_data:
         headers["Cookie"] = f"v-token={api._auth_data.access_token}"
 
-    page_size = min(max(1, max_results), 50)
-    params = {"query": query, "pageSize": str(page_size), "page": "1"}
+    # The endpoint is 0-indexed; page=1 returns a fallback "popular recipes"
+    # pool from a different locale. pageSize is ignored — 20 results per page,
+    # always — so we trim client-side instead.
+    params = {"query": query, "page": "0"}
 
     async with api._session.get(url, headers=headers, params=params) as r:
         r.raise_for_status()
         data = await r.json()
 
     raw_recipes = data.get("data") or data.get("recipes") or []
-    base_url = api.localization.url.rsplit("/foundation/", 1)[0]
 
     results = []
     for item in raw_recipes[:max_results]:
@@ -401,7 +409,8 @@ async def search_recipes(query: str, max_results: int = 10) -> list[dict[str, An
 
     Args:
         query: Free-text search term (e.g. "pasta tomato", "chicken curry", "gluten free cake").
-        max_results: Maximum number of results to return (default 10, max 50).
+        max_results: Maximum number of results to return (default 10). The
+            server returns at most 20 results per call regardless of this value.
     """
     return await cookidoo_search_recipes(query, max_results)
 
