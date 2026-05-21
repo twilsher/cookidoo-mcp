@@ -5,7 +5,12 @@ description = "MCP server for Cookidoo/Thermomix — find recipes, manage meal c
 requires-python = ">=3.12"
 dependencies = [
     "aiohttp>=3.13.3",
-    "cookidoo-api==0.16.0",
+    # Pinned to PR #203's new-auth branch (commit ad9fb13). Cookidoo deprecated
+    # the grant_type=password OAuth flow upstream around 2026-05-08; the released
+    # 0.17.0 still uses it and returns 400 unauthorized_client. PR #203 migrates
+    # to the browser OAuth2 cookie flow that actually works. Switch back to a
+    # released version once the PR is merged (likely 0.18.0+).
+    "cookidoo-api @ git+https://github.com/miaucl/cookidoo-api.git@ad9fb139bef44d803e3abde0f92655ed6d172d30",
     "mcp[cli]>=1.26.0",
     "python-dotenv>=1.2.2",
 ]

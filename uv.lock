@@ -247,16 +247,12 @@ wheels = [
 
 [[package]]
 name = "cookidoo-api"
-version = "0.16.0"
-source = { registry = "https://pypi.org/simple" }
+version = "0.17.0"
+source = { git = "https://github.com/miaucl/cookidoo-api.git?rev=ad9fb139bef44d803e3abde0f92655ed6d172d30#ad9fb139bef44d803e3abde0f92655ed6d172d30" }
 dependencies = [
     { name = "aiofiles" },
     { name = "aiohttp" },
     { name = "isodate" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d6/37/404692b618d5ca3a34d346fe5e0ce2a953e8c2050e541bb4060fb89c84cb/cookidoo_api-0.16.0.tar.gz", hash = "sha256:15896a6de1e17b351f2acf1fd409eebec8081ca529e0228e3d295db2bb223da2", size = 33911, upload-time = "2026-01-14T21:09:26.334Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/af/a5/56eb2253db43d4198d802418289375d26304bb88f36e9a71aed3f881ab64/cookidoo_api-0.16.0-py3-none-any.whl", hash = "sha256:97211aecd66abe95b37fe97e4a13e7b8afa76dcd15abb3367ccaf5963f50ebb8", size = 22911, upload-time = "2026-01-14T21:09:24.902Z" },
 ]
 
 [[package]]
@@ -273,7 +269,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.13.3" },
-    { name = "cookidoo-api", specifier = "==0.16.0" },
+    { name = "cookidoo-api", git = "https://github.com/miaucl/cookidoo-api.git?rev=ad9fb139bef44d803e3abde0f92655ed6d172d30" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.26.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
 ]

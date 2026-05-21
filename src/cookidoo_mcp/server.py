@@ -278,9 +278,8 @@ async def cookidoo_search_recipes(
     base_url = api.localization.url.rsplit("/foundation/", 1)[0]
     url = f"{base_url}/search/{lang}"
 
+    # Session cookies (set during login) handle auth; _api_headers is just Accept.
     headers = dict(api._api_headers)
-    if api._auth_data:
-        headers["Cookie"] = f"v-token={api._auth_data.access_token}"
 
     # The endpoint is 0-indexed; page=1 returns a fallback "popular recipes"
     # pool from a different locale. pageSize is ignored — 20 results per page,
