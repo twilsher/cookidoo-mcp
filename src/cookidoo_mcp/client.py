@@ -130,19 +130,34 @@ class CookidooClient:
         """Get an authenticated Cookidoo API instance."""
         return await self._ensure_authenticated()
 
-    async def raw_request(
+    async def _relogin(self) -> Cookidoo:
+        """Drop the current session and re-authenticate from scratch."""
+        await self.close()
+        self._api = None
+        self._session = None
+        return await self._ensure_authenticated()
+
+    async def call(self, coro_fn):
+        """Call an async function that takes a Cookidoo instance, retrying once on 401."""
+        api = await self.api()
+        try:
+            return await coro_fn(api)
+        except aiohttp.ClientResponseError as exc:
+            if exc.status != 401:
+                raise
+            api = await self._relogin()
+            return await coro_fn(api)
+
+    async def _do_raw_request(
         self,
+        api: "Cookidoo",
         method: str,
         path: str,
-        *,
-        body: dict[str, Any] | None = None,
-        query: dict[str, Any] | None = None,
+        body: dict[str, Any] | None,
+        query: dict[str, Any] | None,
     ) -> dict[str, Any]:
-        """Execute an authenticated request against the localized Cookidoo API."""
-        api = await self.api()
         relative_path = path.lstrip("/")
         url = api.api_endpoint / relative_path
-
         async with api._session.request(
             method.upper(),
             url,
@@ -151,18 +166,30 @@ class CookidooClient:
             params=query,
         ) as response:
             response.raise_for_status()
-
             content_type = response.headers.get("content-type", "")
             if "application/json" in content_type:
                 data: Any = await response.json()
             else:
                 data = await response.text()
+            return {"status": response.status, "url": str(response.url), "body": data}
 
-            return {
-                "status": response.status,
-                "url": str(response.url),
-                "body": data,
-            }
+    async def raw_request(
+        self,
+        method: str,
+        path: str,
+        *,
+        body: dict[str, Any] | None = None,
+        query: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Execute an authenticated request against the localized Cookidoo API, retrying once on 401."""
+        api = await self.api()
+        try:
+            return await self._do_raw_request(api, method, path, body, query)
+        except aiohttp.ClientResponseError as exc:
+            if exc.status != 401:
+                raise
+            api = await self._relogin()
+            return await self._do_raw_request(api, method, path, body, query)
 
     async def close(self) -> None:
         if self._session and not self._session.closed:

@@ -117,7 +117,7 @@ async def _fetch_custom_recipe_ids_for_week(target: date) -> dict[str, list[str]
     customerRecipeIds field, so to surface custom recipes in the meal plan we
     have to hit the raw endpoint ourselves.
     """
-    api = await _client.api()
+    api = await _client.api()  # just for language; raw_request handles 401 retry
     language = api._cfg.localization.language
     path = f"planning/{language}/api/my-week/{target.isoformat()}"
     response = await _client.raw_request("GET", path)
@@ -141,9 +141,8 @@ async def _fetch_custom_recipes(custom_ids: set[str]) -> dict[str, Any]:
     """
     if not custom_ids:
         return {}
-    api = await _client.api()
     results = await asyncio.gather(
-        *(api.get_custom_recipe(rid) for rid in custom_ids),
+        *(_client.call(lambda api, rid=rid: api.get_custom_recipe(rid)) for rid in custom_ids),
         return_exceptions=True,
     )
     out: dict[str, Any] = {}
@@ -175,7 +174,7 @@ def _recipe_path(language: str, recipe_id: str) -> str:
 
 
 async def _get_raw_recipe(recipe_id: str) -> dict[str, Any]:
-    api = await _client.api()
+    api = await _client.api()  # just for language; raw_request handles 401 retry
     raw = await _client.raw_request(
         "GET",
         _recipe_path(api.localization.language, recipe_id),
@@ -204,8 +203,7 @@ def _format_steps(raw_recipe: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 async def _get_recipe_payload(recipe_id: str) -> dict[str, Any]:
-    api = await _client.api()
-    details = await api.get_recipe_details(recipe_id)
+    details = await _client.call(lambda api: api.get_recipe_details(recipe_id))
     raw_recipe = await _get_raw_recipe(recipe_id)
     return {
         "id": details.id,
@@ -267,48 +265,34 @@ async def cookidoo_search_recipes(
         max_results: Maximum number of results to return (default 10). The
             server returns at most 20 results per call regardless of this value.
     """
-    api = await _client.api()
+    async def _do_search(api: Any) -> list[dict[str, Any]]:
+        lang = _search_locale(api.localization.language)
+        base_url = api.localization.url.rsplit("/foundation/", 1)[0]
+        url = f"{base_url}/search/{lang}"
+        headers = dict(api._api_headers)
+        params = {"query": query, "page": "0"}
+        async with api._session.get(url, headers=headers, params=params) as r:
+            r.raise_for_status()
+            data = await r.json()
+        raw_recipes = data.get("data") or data.get("recipes") or []
+        results = []
+        for item in raw_recipes[:max_results]:
+            recipe_id = item.get("id", "")
+            name = _sanitize(item.get("title") or item.get("name") or "")
+            assets = item.get("descriptiveAssets") or []
+            thumbnail, _image = _pick_image(assets)
+            total_time = item.get("totalTime") or item.get("total_time")
+            recipe_url = f"{base_url}/recipes/recipe/{lang}/{recipe_id}"
+            results.append({
+                "id": recipe_id,
+                "name": name,
+                "url": recipe_url,
+                "total_time_seconds": total_time,
+                "thumbnail": thumbnail,
+            })
+        return results
 
-    lang = _search_locale(api.localization.language)
-    # The mobile API host (api.api_endpoint) exposes /search/<lang>, but it
-    # returns matches from an unfiltered global pool — empty results for many
-    # queries and cross-language noise (e.g. Czech soups for "korean pork").
-    # The public web host serves the same path with the locale filter applied,
-    # matching what users see at cookidoo.international/search/<lang>.
-    base_url = api.localization.url.rsplit("/foundation/", 1)[0]
-    url = f"{base_url}/search/{lang}"
-
-    # Session cookies (set during login) handle auth; _api_headers is just Accept.
-    headers = dict(api._api_headers)
-
-    # The endpoint is 0-indexed; page=1 returns a fallback "popular recipes"
-    # pool from a different locale. pageSize is ignored — 20 results per page,
-    # always — so we trim client-side instead.
-    params = {"query": query, "page": "0"}
-
-    async with api._session.get(url, headers=headers, params=params) as r:
-        r.raise_for_status()
-        data = await r.json()
-
-    raw_recipes = data.get("data") or data.get("recipes") or []
-
-    results = []
-    for item in raw_recipes[:max_results]:
-        recipe_id = item.get("id", "")
-        name = _sanitize(item.get("title") or item.get("name") or "")
-        assets = item.get("descriptiveAssets") or []
-        thumbnail, _image = _pick_image(assets)
-        total_time = item.get("totalTime") or item.get("total_time")
-        recipe_url = f"{base_url}/recipes/recipe/{lang}/{recipe_id}"
-        results.append({
-            "id": recipe_id,
-            "name": name,
-            "url": recipe_url,
-            "total_time_seconds": total_time,
-            "thumbnail": thumbnail,
-        })
-
-    return results
+    return await _client.call(_do_search)
 
 
 @mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
@@ -324,8 +308,7 @@ async def cookidoo_get_recipe(recipe_id: str) -> dict[str, Any]:
 @mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 async def cookidoo_get_shopping_list() -> list[dict[str, Any]]:
     """Get the current Cookidoo shopping list items."""
-    api = await _client.api()
-    items = await api.get_ingredient_items()
+    items = await _client.call(lambda api: api.get_ingredient_items())
     return [_format_shopping_item(item) for item in items]
 
 
@@ -339,7 +322,6 @@ async def cookidoo_get_my_week(
         weeks: Number of upcoming weeks to return, including the current week (default 2, max 8).
         start_date: Optional ISO date to start from. Defaults to today.
     """
-    api = await _client.api()
     start = _parse_date(start_date or None)
     week_count = min(max(1, weeks), 8)
 
@@ -348,7 +330,7 @@ async def cookidoo_get_my_week(
         target = start + timedelta(weeks=offset)
         week_start = target - timedelta(days=target.weekday())
         days, custom_ids_by_day = await asyncio.gather(
-            api.get_recipes_in_calendar_week(target),
+            _client.call(lambda api, t=target: api.get_recipes_in_calendar_week(t)),
             _fetch_custom_recipe_ids_for_week(target),
         )
         all_custom_ids = {rid for ids in custom_ids_by_day.values() for rid in ids}
@@ -445,8 +427,7 @@ async def add_to_shopping_list(
         confirmed: Must be true after explicit user approval.
     """
     _require_confirmed(confirmed)
-    api = await _client.api()
-    items = await api.add_ingredient_items_for_recipes(recipe_ids)
+    items = await _client.call(lambda api: api.add_ingredient_items_for_recipes(recipe_ids))
     return [_format_shopping_item(item) for item in items]
 
 
@@ -461,9 +442,8 @@ async def remove_from_shopping_list(
         confirmed: Must be true after explicit user approval.
     """
     _require_confirmed(confirmed)
-    api = await _client.api()
-    await api.remove_ingredient_items_for_recipes(recipe_ids)
-    items = await api.get_ingredient_items()
+    await _client.call(lambda api: api.remove_ingredient_items_for_recipes(recipe_ids))
+    items = await _client.call(lambda api: api.get_ingredient_items())
     return [_format_shopping_item(item) for item in items]
 
 
@@ -471,8 +451,7 @@ async def remove_from_shopping_list(
 async def clear_shopping_list(confirmed: bool = False) -> dict[str, str]:
     """Wipe the entire shopping list (removes all ingredient items)."""
     _require_confirmed(confirmed)
-    api = await _client.api()
-    await api.clear_shopping_list()
+    await _client.call(lambda api: api.clear_shopping_list())
     return {"status": "ok", "message": "Shopping list cleared."}
 
 
@@ -487,10 +466,9 @@ async def get_calendar_week(date: str = "") -> list[dict[str, Any]]:
     Args:
         date: ISO date string (e.g. "2025-03-15"). Defaults to today.
     """
-    api = await _client.api()
     target = _parse_date(date or None)
     days, custom_ids_by_day = await asyncio.gather(
-        api.get_recipes_in_calendar_week(target),
+        _client.call(lambda api, t=target: api.get_recipes_in_calendar_week(t)),
         _fetch_custom_recipe_ids_for_week(target),
     )
     all_custom_ids = {rid for ids in custom_ids_by_day.values() for rid in ids}
@@ -520,7 +498,6 @@ async def add_to_calendar(
         confirmed: Must be true after explicit user approval.
     """
     _require_confirmed(confirmed)
-    api = await _client.api()
     target = _parse_date(date)
 
     standard_ids = [rid for rid in recipe_ids if not _is_custom_recipe_id(rid)]
@@ -528,9 +505,9 @@ async def add_to_calendar(
 
     day = None
     if standard_ids:
-        day = await api.add_recipes_to_calendar(target, standard_ids)
+        day = await _client.call(lambda api, t=target, s=standard_ids: api.add_recipes_to_calendar(t, s))
     if custom_ids:
-        day = await api.add_custom_recipes_to_calendar(target, custom_ids)
+        day = await _client.call(lambda api, t=target, c=custom_ids: api.add_custom_recipes_to_calendar(t, c))
     return _format_calendar_day(day)
 
 
@@ -546,10 +523,9 @@ async def remove_from_calendar(
         confirmed: Must be true after explicit user approval.
     """
     _require_confirmed(confirmed)
-    api = await _client.api()
     target = _parse_date(date)
     if _is_custom_recipe_id(recipe_id):
-        day = await api.remove_custom_recipe_from_calendar(target, recipe_id)
+        day = await _client.call(lambda api, t=target, r=recipe_id: api.remove_custom_recipe_from_calendar(t, r))
     else:
-        day = await api.remove_recipe_from_calendar(target, recipe_id)
+        day = await _client.call(lambda api, t=target, r=recipe_id: api.remove_recipe_from_calendar(t, r))
     return _format_calendar_day(day)
