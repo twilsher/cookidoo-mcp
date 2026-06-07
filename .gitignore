@@ -14,3 +14,8 @@ wheels/
 
 # macOS
 .DS_Store
+
+# Capture artefacts — contain auth cookies, never commit
+captures/*.har
+captures/*storage*.json
+captures/*.log

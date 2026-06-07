@@ -1,0 +1,56 @@
+{
+  "@context": "http://schema.org/",
+  "@type": "Recipe",
+  "name": "Lentil Moussaka",
+  "image": "https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480_1_5x/img/recipe/ras/Assets/33649560-024E-4EB4-8205-440AB6CAD554/Derivates/A2AC59F6-3402-4660-AD13-08E0BA850A49.jpg",
+  "totalTime": "PT3H30M",
+  "cookTime": "PT3H30M",
+  "prepTime": "PT25M",
+  "recipeYield": "6 portions",
+  "recipeCategory": [
+    "Main dishes - vegetarian"
+  ],
+  "recipeIngredient": [
+    "200 g red lentils",
+    " water",
+    "120 g Parmesan cheese",
+    "50 g olive oil",
+    "150 g onions",
+    "3 garlic cloves",
+    "1 red pepper",
+    "400 g tinned chopped tomatoes",
+    "120 g red wine",
+    "1 sprig fresh oregano",
+    "1 tsp ground ginger",
+    "2 tsp fine sea salt",
+    "&frac12; tsp ground black pepper",
+    "550 g aubergines",
+    "40 g unsalted butter",
+    "500 g whole milk",
+    "40 g spelt flour"
+  ],
+  "nutrition": {
+    "@type": "NutritionInformation",
+    "calories": "443 kcal",
+    "carbohydrateContent": "29 g",
+    "fatContent": "25 g",
+    "proteinContent": "20 g"
+  },
+  "inLanguage": "en",
+  "author": {
+    "@type": "Organization",
+    "name": "Vorwerk Home & Co. KmG",
+    "address": "Wolleraustrasse 11a\n8807 Freienbach\nSwitzerland",
+    "url": "https://cookidoo.co.uk"
+  },
+  "aggregateRating": {
+    "@id": "AggregatedRating"
+  }
+}
+{
+  "@context": "http://schema.org",
+  "@type": "AggregateRating",
+  "@id": "AggregatedRating",
+  "ratingValue": 4.7,
+  "reviewCount": 300
+}

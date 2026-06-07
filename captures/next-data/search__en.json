@@ -1,0 +1,2009 @@
+{
+  "props": {
+    "pageProps": {
+      "translations": {
+        "common": {
+          "tmde": {
+            "community": {
+              "link": {
+                "viewprofile": "View profile"
+              },
+              "text": {
+                "profile": "Profile"
+              }
+            },
+            "component": {
+              "searchbar": {
+                "button": {
+                  "search": "Search"
+                },
+                "label": {
+                  "searchcookidoo": "Search Cookidoo®"
+                }
+              }
+            },
+            "general": {
+              "bladecover": "Thermomix® Blade Cover",
+              "button": {
+                "readmore": "Read more"
+              },
+              "category": {
+                "string": {
+                  "babyfood": "Baby food",
+                  "bakingsavoury": "Baking – Savoury",
+                  "bakingsweet": "Baking – sweet",
+                  "basics": "Basics",
+                  "breads": "Breads and Rolls",
+                  "breakfast": "Breakfast",
+                  "desserts": "Desserts and Sweets",
+                  "drinks": "Drinks",
+                  "maindishesfish": "Main dishes – Fish",
+                  "maindishesmeat": "Main dishes – Meat",
+                  "maindishesother": "Main dishes – Other",
+                  "maindishesvegetarian": "Main dishes – Vegetarian",
+                  "menus": "Menus and More",
+                  "pastaandrice": "Pasta & Rice Dishes",
+                  "saucessavoury": "Sauces, Dips and Spreads – Savoury",
+                  "saucessweet": "Sauces, Dips and Spreads – Sweet",
+                  "sidedishes": "Side Dishes",
+                  "snacks": "Snacks",
+                  "soups": "Soups",
+                  "starters": "Starters"
+                }
+              },
+              "country": {
+                "argentina": "Argentina",
+                "australia": "Australia",
+                "austria": "Austria",
+                "bahrain": "Bahrain",
+                "belgium": "Belgium",
+                "brazil": "Brazil",
+                "brunei": "Brunei",
+                "bulgaria": "Bulgaria",
+                "canada": "Canada",
+                "chile": "Chile",
+                "china": "China",
+                "colombia": "Colombia",
+                "costarica": "Costa Rica",
+                "cyprus": "Cyprus",
+                "czechrepublic": "Czech Republic",
+                "denmark": "Denmark",
+                "egypt": "Egypt",
+                "estonia": "Estonia",
+                "france": "France",
+                "germany": "Germany",
+                "greece": "Greece",
+                "guatemala": "Guatemala",
+                "hungary": "Hungary",
+                "iceland": "Iceland",
+                "indonesia": "Indonesia",
+                "ireland": "Ireland",
+                "israel": "Israel",
+                "italy": "Italy",
+                "kuwait": "Kuwait",
+                "lithuania": "Lithuania",
+                "luxembourg": "Luxembourg",
+                "malaysia": "Malaysia",
+                "malta": "Malta",
+                "mexico": "Mexico",
+                "morocco": "Morocco",
+                "netherlands": "Netherlands",
+                "newzealand": "New Zealand",
+                "norway": "Norway",
+                "oman": "Oman",
+                "panama": "Panama",
+                "paraguay": "Paraguay",
+                "peru": "Peru",
+                "philippines": "Philippines",
+                "poland": "Poland",
+                "portugal": "Portugal",
+                "qatar": "Qatar",
+                "romania": "Romania",
+                "russia": "Russia",
+                "saudiarabia": "Saudi Arabia",
+                "singapore": "Singapore",
+                "southafrica": "South Africa",
+                "spain": "Spain",
+                "sweden": "Sweden",
+                "switzerland": "Switzerland",
+                "taiwan": "Taiwan",
+                "thailand": "Thailand",
+                "tunisia": "Tunisia",
+                "turkey": "Türkiye",
+                "uae": "United Arab Emirates",
+                "uk": "United Kingdom",
+                "ukraine": "Ukraine",
+                "uruguay": "Uruguay",
+                "usa": "United States",
+                "vietnam": "Vietnam"
+              },
+              "cs": "Thermomix Friend",
+              "cutter": "Thermomix® Cutter",
+              "cutterplus": "Thermomix® Cutter+",
+              "error": {
+                "functionnotavailable": "Function is currently not available.",
+                "headline": {
+                  "404": "Oops!",
+                  "4XX": "Oops!",
+                  "5XX": "Oops!",
+                  "maintenance": "Fresh ingredients are on the way"
+                },
+                "text": {
+                  "404": "We’re sorry, we cannot find this page.",
+                  "4XX": "Sorry, a problem has occurred.",
+                  "5XX": "Sorry, a problem has occurred.",
+                  "maintenance": "We are currently working on Cookidoo® - it will be back soon!",
+                  "pagecannotbeserved": "Sorry, the page you're trying to reach can't be served.",
+                  "pagenotavailablefordevice": "This page is not available on your Thermomix®. You can scan the QR-Code above with your smartphone to continue. \n",
+                  "pagenotavailablefornativemobile": "This page is not available within the Cookidoo® app. To access the page, visit Cookidoo® via your mobile browser.",
+                  "recipenotfound": "Recipe not found",
+                  "somethingwentwrong": "Something went wrong. We’re looking into it.",
+                  "somethingwentwrong2": "Sorry, something went wrong. Cookidoo® did not respond."
+                }
+              },
+              "hour": " h",
+              "language": {
+                "arabic": "Arabic",
+                "bg": "Bulgaria",
+                "bulgarian": "Bulgarian",
+                "czech": "Czech",
+                "dk": "Danish",
+                "dutch": "Dutch",
+                "el": "Greek",
+                "english": "English",
+                "french": "French",
+                "german": "German",
+                "hungarian": "Hungarian",
+                "icelandic": "Icelandic",
+                "indonesian": "Indonesian",
+                "italian": "Italian",
+                "norwegian": "Norwegian",
+                "polish": "Polish",
+                "portuguese": "Portuguese",
+                "portuguese-brazil": "Portuguese",
+                "ro": "Romanian",
+                "ru": "Russian",
+                "simpchinese": "Simp. Chinese",
+                "spanish": "Spanish",
+                "swedish": "Swedish",
+                "tradchinese": "Trad. Chinese",
+                "turkish": "Turkish",
+                "vietnamese": "Vietnamese"
+              },
+              "link": {
+                "explore": "Explore"
+              },
+              "minute": " min",
+              "peeler": "Thermomix® Blade Cover and Peeler",
+              "peelershort": "Thermomix® Peeler",
+              "recipetile": {
+                "openContextMenu": {
+                  "alt": "Open recipe options"
+                },
+                "ratingGiven": {
+                  "alt": "from {{ratingCount}} reviews"
+                },
+                "ratingScore": {
+                  "alt": "Rating {{ratingScore}}"
+                },
+                "totalTime": {
+                  "alt": "Total time {{time}}"
+                }
+              },
+              "sensor": "Thermomix® Sensor",
+              "thermomix": "Thermomix®",
+              "tmf": {
+                "individual": {
+                  "r": "Thermomix® Friend"
+                }
+              }
+            },
+            "meta": {
+              "cookidoodescription": "A world of Thermomix® recipes -  Cookidoo® brings you delicious food all over the world.\nWith thousands of recipes and ideas, you'll find mouth-watering inspiration every time you log in.",
+              "foundation": {
+                "cms": {
+                  "title": "Cookidoo® – the official Thermomix® recipe platform"
+                }
+              },
+              "planning": {
+                "title": {
+                  "search": "Search"
+                }
+              },
+              "recipe": {
+                "author": {
+                  "name": "Vorwerk Home & Co. KmG"
+                }
+              }
+            },
+            "recipe": {
+              "icon": {
+                "label": {
+                  "difficulty": {
+                    "advanced": "advanced",
+                    "easy": "easy",
+                    "medium": "medium"
+                  }
+                }
+              },
+              "label": {
+                "difficulty": "Difficulty",
+                "noratings": "No ratings",
+                "ratings": "Ratings"
+              },
+              "option": {
+                "refreshlogin": "Refresh login"
+              },
+              "rating": {
+                "label": {
+                  "star_one": "star",
+                  "star_other": "stars",
+                  "star_zero": "stars"
+                }
+              }
+            },
+            "search": {
+              "1000recipeslimit": {
+                "message": {
+                  "body": "Still haven’t found what you’re looking for? Try to use filters or find inspiration on the Explore page. ",
+                  "header": "You have reached the limit of 1000 results."
+                }
+              },
+              "button": {
+                "label": {
+                  "clearInput": {
+                    "alt": "Clear input"
+                  },
+                  "showHint": {
+                    "alt": "Show hint"
+                  }
+                }
+              },
+              "filter": {
+                "addFilterSuggestion": {
+                  "alt": "Add {{name}} filter"
+                },
+                "button": {
+                  "filters": "Filters",
+                  "onlytmf": "Only with Thermomix Friend",
+                  "saveDefaults": "Save as default",
+                  "withtmf": "Include Thermomix Friend"
+                },
+                "checkbox": {},
+                "description": {
+                  "includedAccessory": "Filters recipes you are able to cook using your owned accessories.",
+                  "includedAccessoryEmpty": "We use your owned accessories to show recipes you can cook.",
+                  "mydevices": "Devices you own are selected by default."
+                },
+                "deselectFilter": {
+                  "alt": "Deselect {{name}}"
+                },
+                "entry": {
+                  "exclusiverecipes": "Show device's exclusive recipes"
+                },
+                "excludedingredients": {
+                  "header": "Excluded Ingredients"
+                },
+                "filterTypeMultiSelect": {
+                  "alt": "{{name}} Multi selection filter"
+                },
+                "filterTypeSingleSelect": {
+                  "alt": "{{name}} Single selection filter"
+                },
+                "label": {
+                  "3stars": "3 stars and more",
+                  "4stars": "4 stars and more",
+                  "collectionsselected _one": "collection selected",
+                  "collectionsselected _other": "collections selected",
+                  "collectionsselected _zero": "collections selected",
+                  "otherfilters": "Other filters",
+                  "recipeslike": "similar to: {likeRecipeTitle}",
+                  "recipesselected_one": "recipe selected",
+                  "recipesselected_other": "recipes selected",
+                  "recipesselected_zero": "recipes selected",
+                  "without": "without"
+                },
+                "link": {
+                  "manageAccessories": "Manage your accessories",
+                  "manageDevices": "Manage your devices",
+                  "placeholder": {
+                    "account": "Account"
+                  },
+                  "resetfilters": "Reset"
+                },
+                "list": {
+                  "entry": {
+                    "bestrated": "Best rated",
+                    "bestsellers": "Bestsellers first",
+                    "name": "Name",
+                    "newest": "Newest\n",
+                    "none": "None",
+                    "preparationtime": "Prep. time, shortest",
+                    "relevance": "Relevance",
+                    "tm21": "TM21",
+                    "tm31": "TM31",
+                    "tm5": "TM5",
+                    "tm6": "TM6",
+                    "tm6only": "TM6 only",
+                    "tm7": "TM7",
+                    "tm7only": "TM7 only",
+                    "totaltime": "Total time, shortest"
+                  },
+                  "headline": {
+                    "additionaldevices": "Additional devices",
+                    "category": "Category",
+                    "country": "Country or region",
+                    "devices": "My devices",
+                    "difficulty": "Difficulty",
+                    "ingredients": "Ingredients",
+                    "language": "Language",
+                    "portions": "Portions",
+                    "preparationtime": "Preparation time",
+                    "sortby": "Sort by",
+                    "tags": "Tags",
+                    "time": "Time",
+                    "tmversion": "Thermomix® version",
+                    "totaltime": "Total time"
+                  },
+                  "subheadline": {
+                    "excludedAccessory": "Show exclusive results for:",
+                    "includedAccessoryEmpty": "No accessories owned yet"
+                  }
+                },
+                "modal": {
+                  "accessories": {
+                    "button": {
+                      "include": "Include accessories",
+                      "only": "Show only recipes using the active accessory"
+                    },
+                    "header": "Thermomix® accessories\n",
+                    "subheader": {
+                      "include": "Select the accessories you want to include in your search among other recipes. Unchecked accessories are excluded from search results.",
+                      "noselection": "You will see recipes that do not require additional accessories.",
+                      "only": "Show only recipes using the active accessory"
+                    }
+                  },
+                  "button": {
+                    "openDevices": "Open My Devices",
+                    "saveasstandard": "Save as default search",
+                    "showresults_one": "Show {nbHits} result",
+                    "showresults_other": "Show {nbHits} results",
+                    "showresults_zero": "Show {nbHits} results"
+                  },
+                  "label": {
+                    "ingredients": "You can use a \"-\" while typing ingredients to exclude certain ingredients e.g. -salt. ",
+                    "noingredients": "No selected ingredients",
+                    "nosearchfilters": "There are no filters available for your current selection. Please alter your search term.",
+                    "notags": "No selected tags",
+                    "searchforingredients": "Search for ingredients...",
+                    "searchfortags": "Search for tags...",
+                    "selectedingredients": "Selected ingredients:",
+                    "selectedtags": "Selected tags:"
+                  },
+                  "link": {
+                    "closecategories": "Close categories",
+                    "closecountries": "Close country or region",
+                    "closelanguages": "Close languages",
+                    "showallcategories": "Show all categories",
+                    "showallcountries": "Show all countries or regions",
+                    "showalllanguages": "Show all languages"
+                  },
+                  "minimalrating": {
+                    "header": "Minimal rating",
+                    "subheader": {
+                      "3stars": "You will see recipes with 3 or more stars.",
+                      "4stars": "You will see recipes with 4 or more stars.",
+                      "5stars": "You will see recipes with 5 stars only.",
+                      "noselection": "Select star to see recipes with that amount of stars or more."
+                    }
+                  },
+                  "numberresults_one": "result",
+                  "numberresults_other": "results",
+                  "numberresults_zero": "results",
+                  "numberselected_one": "{count} selected",
+                  "numberselected_other": "{count} selected",
+                  "numberselected_zero": "{count} selected",
+                  "portions": {
+                    "selection_one": "You will see recipes with {counter} portion only.",
+                    "selection_other": "You will see recipes with {counter} portions only.",
+                    "selection_zero": "You will see recipes with {counter} portions only.",
+                    "tooltip": "The activated portion filter excludes all other serving sizes like pieces, slices, bottles, and more."
+                  },
+                  "tooltip": {
+                    "tags": "To exclude certain tags from your search, type \"-\" and then the tag name, e.g. \"-difficult\". \nAs not all recipes are tagged, excluding a certain one will reduce the number of results rather than show the opposite."
+                  }
+                },
+                "ratingScore": {
+                  "alt": "{{number}} star rating"
+                },
+                "removeFilterSuggestion": {
+                  "alt": "Remove {{name}} filter"
+                },
+                "selectFilter": {
+                  "alt": "Select {{name}}"
+                },
+                "subheadline": {
+                  "includedAccessory": "Show results for accessories you own"
+                },
+                "suggestion": {
+                  "additionaldevices": "Filter for additional devices:",
+                  "includedAccessory": "By default: matched to your linked accessories",
+                  "ownedDevices": "By default: matched to your devices"
+                },
+                "tab": {
+                  "cookingFilters": "Cooking filters",
+                  "searchPreferences": "Search preferences "
+                }
+              },
+              "results": {
+                "activeFilterButton": {
+                  "alt": "Change additional filters"
+                },
+                "activeQuickFilter": {
+                  "alt": "Change {{name}} filter"
+                },
+                "activeSearchTab": {
+                  "alt": "{{name}} currently selected search scope"
+                },
+                "button": {
+                  "articles": "Articles",
+                  "collections": "Collections",
+                  "loadmore": "Load more",
+                  "loadprevious": "Load previous",
+                  "recipes": "Recipes"
+                },
+                "headline": {
+                  "noresults": "Please alter your search term or adjust filters."
+                },
+                "inactiveFilterButton": {
+                  "alt": "Set additional filters"
+                },
+                "inactiveQuickFilter": {
+                  "alt": "Set {{name}} filter"
+                },
+                "inactiveSearchTab": {
+                  "alt": "Change search scope to {{name}}"
+                },
+                "label": {
+                  "all": "All",
+                  "checkspelling": "Please check your spelling, try searching with fewer keywords or remove some of the selected filters.",
+                  "found_one": "result found",
+                  "found_other": "results found",
+                  "found_zero": "results found",
+                  "nocollectionfound": "no collections found",
+                  "norecipesfound": "no recipes found",
+                  "noresults": "Sorry, no results found for “{query}”. ",
+                  "search": "Search"
+                },
+                "noquery": {
+                  "headline": {
+                    "noresults": "Please check your search filters, incl. your default search filters in your profile."
+                  },
+                  "label": {
+                    "noresults": "Sorry, no results found for this combination of filters."
+                  }
+                },
+                "notification": {
+                  "connectionresults": "Connection lost"
+                },
+                "resultsNumber": {
+                  "alt_one": "{{number}} result",
+                  "alt_other": "{{number}} results",
+                  "alt_zero": "{{number}} results"
+                },
+                "sorting": {
+                  "alt": "Change sorting. Currently set to {{activeSorting}}"
+                }
+              },
+              "savedfilters": {
+                "text": {
+                  "saveyourdefaultfilter": "Save your default search filter",
+                  "tooltipdescription": "You can save your default filters in your Cookidoo® profile. Doing this will load search every time with the same filters.",
+                  "updatedefaultfilter": "Update default filter"
+                }
+              }
+            },
+            "system": {
+              "navigation": {
+                "link": {
+                  "account": "Account",
+                  "explore": "Explore",
+                  "explorecookidoo": "Explore Cookidoo®",
+                  "foryou": "For You",
+                  "help": "Help",
+                  "login": "Login",
+                  "membership": "Membership",
+                  "menu": "Menu",
+                  "myAdvisor": "My Advisor",
+                  "myrecipes": "My Recipes",
+                  "myweek": "My Week",
+                  "profile": "My Profile",
+                  "search": "Search",
+                  "shoppinglist": "Shopping List",
+                  "signout": "Sign out",
+                  "signup": "Sign up"
+                }
+              }
+            }
+          }
+        }
+      },
+      "platform": "web",
+      "host": "cookidoo.international",
+      "actionLinkTemplates": {
+        "manageCookToday": {
+          "link": {
+            "href": "/planning/{lang}/transclude/manage-cook-today/{recipeId}{?recipeSource}",
+            "templated": true
+          },
+          "serviceName": "tmde2:planning",
+          "serviceActionName": "fint:transclude-manage-cook-today"
+        },
+        "manageBookmark": {
+          "link": {
+            "href": "/organize/{lang}/transclude/manage-bookmark/{recipeId}",
+            "templated": true
+          },
+          "serviceName": "tmde2:organize",
+          "serviceActionName": "fint:transclude-manage-bookmark"
+        },
+        "manageCustomList": {
+          "link": {
+            "href": "/organize/{lang}/transclude/manage-custom-list/{recipeId}",
+            "templated": true
+          },
+          "serviceName": "tmde2:organize",
+          "serviceActionName": "fint:transclude-manage-custom-list"
+        },
+        "addToMyWeek": {
+          "link": {
+            "href": "/planning/{lang}/transclude/manage-add-to-myweek/{recipeId}{?recipeSource}",
+            "templated": true
+          },
+          "serviceName": "tmde2:planning",
+          "serviceActionName": "fint:transclude-manage-add-to-my-week"
+        },
+        "addToShoppingList": {
+          "link": {
+            "href": "/shopping/{lang}/partial/add-to-shopping-list/{recipeID}{?source}",
+            "templated": true,
+            "profile": "frontend-integration"
+          },
+          "serviceName": "tmde2:pantry",
+          "serviceActionName": "fint:add-to-shopping-list"
+        },
+        "addToCustomerRecipes": {
+          "link": {
+            "href": "/created-recipes/{lang}/partials/add-to-customer-recipes{?recipeUrl}",
+            "templated": true
+          },
+          "serviceName": "tmde2:customer-recipes",
+          "serviceActionName": "fint:add-to-customer-recipes"
+        },
+        "recipeDetails": {
+          "link": {
+            "href": "/recipes/recipe{/lang}/{id}",
+            "templated": true
+          },
+          "serviceName": "tmde2:recipe-details",
+          "serviceActionName": "fint:details"
+        },
+        "recipeDetailsUrl": {
+          "link": {
+            "href": "http://127.0.0.1:9000/recipes/recipe{/lang}/{id}",
+            "templated": true
+          },
+          "serviceName": "tmde2:recipe-details",
+          "serviceActionName": "recipe:details"
+        },
+        "collectionDetails": {
+          "link": {
+            "href": "/collection/{lang}/p/{code}",
+            "templated": true
+          },
+          "serviceName": "tmde2:collections",
+          "serviceActionName": "fint:collection-details"
+        },
+        "login": {
+          "link": {
+            "href": "/profile/{lang}/login{?redirectAfterLogin}",
+            "templated": true
+          },
+          "serviceName": "tmde2:profile",
+          "serviceActionName": "fint:login"
+        },
+        "userCommunityProfile": {
+          "link": {
+            "href": "/community/profile/{lang}",
+            "templated": true,
+            "profile": "frontend-integration"
+          },
+          "serviceName": "tmde2:community-profile",
+          "serviceActionName": "fint:user-private-profile",
+          "parsedLink": "/community/profile/en"
+        },
+        "savedSearches": {
+          "link": {
+            "href": "/community/profile/{lang}/saved-searches",
+            "templated": true,
+            "profile": "frontend-integration"
+          },
+          "serviceName": "tmde2:community-profile",
+          "serviceActionName": "fint:saved-searches",
+          "parsedLink": "/community/profile/en/saved-searches"
+        },
+        "exploreWeb": {
+          "link": {
+            "href": "/foundation/{lang}/explore",
+            "templated": true
+          },
+          "serviceName": "tmde2:foundation",
+          "serviceActionName": "fint:explore-web",
+          "parsedLink": "/foundation/en/explore"
+        },
+        "forYouWeb": {
+          "link": {
+            "href": "/foundation/{lang}/for-you",
+            "templated": true
+          },
+          "serviceName": "tmde2:foundation",
+          "serviceActionName": "fint:for-you-web"
+        },
+        "myRecipes": {
+          "link": {
+            "href": "/organize/{lang}/my-recipes",
+            "templated": true
+          },
+          "serviceName": "tmde2:organize",
+          "serviceActionName": "fint:web-my-recipes",
+          "parsedLink": "/organize/en/my-recipes"
+        },
+        "myWeek": {
+          "link": {
+            "href": "/planning/{lang}/my-week{?backButtonLoadsPreviousWidget}",
+            "templated": true
+          },
+          "serviceName": "tmde2:planning",
+          "serviceActionName": "fint:web-my-week",
+          "parsedLink": "/planning/en/my-week"
+        },
+        "accountOverview": {
+          "link": {
+            "href": "/commerce/{lang}/membership{?paymentUpdated}",
+            "templated": true
+          },
+          "serviceName": "tmde2:profile",
+          "serviceActionName": "fint:account-overview",
+          "parsedLink": "/commerce/en/membership"
+        },
+        "help": {
+          "link": {
+            "href": "/foundation/{lang}/help",
+            "templated": true
+          },
+          "serviceName": "tmde2:foundation",
+          "serviceActionName": "fint:help",
+          "parsedLink": "/foundation/en/help"
+        },
+        "membership": {
+          "link": {
+            "href": "/foundation/{lang}/membership",
+            "templated": true
+          },
+          "serviceName": "tmde2:foundation",
+          "serviceActionName": "fint:membership",
+          "parsedLink": "/foundation/en/membership"
+        },
+        "footer": {
+          "link": {
+            "href": "http://web-foundation-service.production-eu.svc.cluster.local:8030/foundation/{lang}/partials/footer{?page}",
+            "templated": true
+          },
+          "serviceName": "tmde2:foundation",
+          "serviceActionName": "fint:footer"
+        },
+        "register": {
+          "link": {
+            "href": "/ciam/register/start"
+          },
+          "serviceName": "tmde2:profile",
+          "serviceActionName": "fint:register-page",
+          "parsedLink": "/ciam/register/start"
+        },
+        "shoppingList": {
+          "link": {
+            "href": "/shopping/{lang}{?excludeComponent}",
+            "templated": true,
+            "profile": "frontend-integration"
+          },
+          "serviceName": "tmde2:pantry",
+          "serviceActionName": "fint:home"
+        },
+        "myAdvisor": {
+          "link": {
+            "href": "/foundation/{lang}/my-advisor",
+            "templated": true,
+            "profile": "frontend-integration"
+          },
+          "serviceName": "tmde2:foundation",
+          "serviceActionName": "fint:my-advisor",
+          "parsedLink": "/foundation/en/my-advisor"
+        },
+        "customerDevices": {
+          "link": {
+            "href": "/customer-devices/{lang}/my-devices",
+            "templated": true
+          },
+          "serviceName": "tmde2:customer-devices",
+          "serviceActionName": "fint:my-devices-page-cd2",
+          "parsedLink": "/customer-devices/en/my-devices"
+        },
+        "customerDevicesVersions": {
+          "link": {
+            "href": "/customer-devices/api/my-devices/versions"
+          },
+          "serviceName": "tmde2:customer-devices",
+          "serviceActionName": "fint:thermomix-versions"
+        },
+        "customerAccessories": {
+          "link": {
+            "href": "/customer-devices/{lang}/my-accessories",
+            "templated": true
+          },
+          "serviceName": "tmde2:customer-devices",
+          "serviceActionName": "fint:my-accessories-page-cd2",
+          "parsedLink": "/customer-devices/en/my-accessories"
+        }
+      },
+      "algoliaAppId": "3TA8NT85XJ",
+      "algoliaEnv": "production",
+      "featureToggle": {
+        "algoliaTrackingForApp": {
+          "visible": "ON"
+        },
+        "algoliaTrackingForWeb": {
+          "visible": "ON"
+        },
+        "ingredientsFilterSuggestionsV2": {
+          "visible": "ON",
+          "marketRestriction": [
+            "de"
+          ]
+        },
+        "subscriptionCheck": {
+          "visible": "ON"
+        },
+        "disableEmptySearchScore": {
+          "visible": "ON",
+          "marketRestriction": [
+            "cn"
+          ]
+        }
+      },
+      "centralFeatureFlags": {
+        "cicd2": true,
+        "cosy": true,
+        "forYou": true
+      },
+      "mobileLinkScheme": "com.vorwerk.cookidoo://",
+      "market": {
+        "name": "international",
+        "marketCode": "xp",
+        "phraseappMarketKey": "international",
+        "operator": "VI (Export)",
+        "countries": [
+          {
+            "name": "Argentina",
+            "code": "AR"
+          },
+          {
+            "name": "Bahrain",
+            "code": "BH"
+          },
+          {
+            "name": "Oman",
+            "code": "OM"
+          },
+          {
+            "name": "Qatar",
+            "code": "QA"
+          },
+          {
+            "name": "Brazil",
+            "code": "BR"
+          },
+          {
+            "name": "Bulgaria",
+            "code": "BG"
+          },
+          {
+            "name": "Brunei",
+            "code": "BN"
+          },
+          {
+            "name": "Chile",
+            "code": "CL"
+          },
+          {
+            "name": "Colombia",
+            "code": "CO"
+          },
+          {
+            "name": "Costa Rica",
+            "code": "CR"
+          },
+          {
+            "name": "Cyprus",
+            "code": "CY"
+          },
+          {
+            "name": "Denmark",
+            "code": "DK"
+          },
+          {
+            "name": "Guatemala",
+            "code": "GT"
+          },
+          {
+            "name": "Hungary",
+            "code": "HU"
+          },
+          {
+            "name": "Iceland",
+            "code": "IS"
+          },
+          {
+            "name": "Indonesia",
+            "code": "ID"
+          },
+          {
+            "name": "Kazakhstan",
+            "code": "KZ"
+          },
+          {
+            "name": "Kuwait",
+            "code": "KW"
+          },
+          {
+            "name": "Malta",
+            "code": "MT"
+          },
+          {
+            "name": "Malaysia",
+            "code": "MY"
+          },
+          {
+            "name": "Morocco",
+            "code": "MA"
+          },
+          {
+            "name": "Norway",
+            "code": "NO"
+          },
+          {
+            "name": "Panama",
+            "code": "PA"
+          },
+          {
+            "name": "Paraguay",
+            "code": "PY"
+          },
+          {
+            "name": "Peru",
+            "code": "PE"
+          },
+          {
+            "name": "Romania",
+            "code": "RO"
+          },
+          {
+            "name": "Saudi Arabia",
+            "code": "SA"
+          },
+          {
+            "name": "Singapore",
+            "code": "SG"
+          },
+          {
+            "name": "Sweden",
+            "code": "SE"
+          },
+          {
+            "name": "South Africa",
+            "code": "ZA"
+          },
+          {
+            "name": "Ukraine",
+            "code": "UA"
+          },
+          {
+            "name": "Uruguay",
+            "code": "UY"
+          },
+          {
+            "name": "United Arab Emirates",
+            "code": "AE"
+          },
+          {
+            "name": "Egypt",
+            "code": "EG"
+          },
+          {
+            "name": "Tunisia",
+            "code": "TN"
+          },
+          {
+            "name": "Estonia",
+            "code": "EE"
+          },
+          {
+            "name": "Lithuania",
+            "code": "LT"
+          },
+          {
+            "name": "Thailand",
+            "code": "TH"
+          },
+          {
+            "name": "Israel",
+            "code": "IL"
+          },
+          {
+            "name": "Philippines",
+            "code": "PH"
+          }
+        ],
+        "mainDomain": "cookidoo.international",
+        "awsRegion": "EU",
+        "userBucket": "Switzerland",
+        "mainCurrency": "USD",
+        "editorialContentLanguageTags": [
+          "en",
+          "fr-XP, fr",
+          "es, en",
+          "ro, en",
+          "el, en",
+          "hu, en",
+          "zh-Hans, en",
+          "en-XP, en",
+          "es-XP, es",
+          "es-XP, es, es-MX",
+          "pt-BR, pt",
+          "ar, en",
+          "bg, en",
+          "ru",
+          "kk"
+        ],
+        "defaultUILanguage": "en",
+        "allowedUILanguages": [
+          "bg",
+          "en",
+          "fr",
+          "es",
+          "es-MX",
+          "ro",
+          "hu",
+          "zh-Hans",
+          "el",
+          "id",
+          "pt-BR",
+          "vi",
+          "ar",
+          "ru",
+          "kk"
+        ],
+        "currencies": [
+          "USD"
+        ],
+        "countryCodes": [
+          "AR",
+          "BH",
+          "OM",
+          "QA",
+          "BR",
+          "BG",
+          "BN",
+          "CL",
+          "CO",
+          "CR",
+          "CY",
+          "DK",
+          "GT",
+          "HU",
+          "IS",
+          "ID",
+          "KZ",
+          "KW",
+          "MT",
+          "MY",
+          "MA",
+          "NO",
+          "PA",
+          "PY",
+          "PE",
+          "RO",
+          "SA",
+          "SG",
+          "SE",
+          "ZA",
+          "UA",
+          "UY",
+          "AE",
+          "EG",
+          "TN",
+          "EE",
+          "LT",
+          "TH",
+          "IL",
+          "PH"
+        ],
+        "market": "cookidoo.international"
+      },
+      "staticFooterHtml": "  \n  \n  <core-footer lang=\"en\">\n    <footer class=\"core-footer__content\">\n          <div class=\"footer-copyright\">\n            <span class=\"core-footer__copyright\">&#xA9; Copyright 2026</span>\n          </div>\n          <nav>\n            <ul class=\"core-footer__links\">\n              <li class=\"authenticated-only\">\n                <a class=\"core-footer__link link--alt\" href=\"/consent/web/customers/en/documents/TOS\">\n                  Terms of Service\n                </a>\n              </li>\n              <li class=\"authenticated-only\">\n                <a class=\"core-footer__link link--alt\" href=\"/consent/web/customers/en/documents/PRIVACY\">\n                  Privacy Policy\n                </a>\n              </li>\n              <li class=\"unauthenticated-only\">\n                <a class=\"core-footer__link link--alt\" href=\"/consent/web/documents/en/latest/tos\">\n                  Terms of Service\n                </a>\n              </li>\n              <li class=\"unauthenticated-only\">\n                <a class=\"core-footer__link link--alt\" href=\"/consent/web/documents/en/latest/privacy\">\n                  Privacy Policy\n                </a>\n              </li>\n              <li>\n                <a class=\"core-footer__link link--alt\" href=\"/foundation/en/disclaimer\">Disclaimer</a>\n              </li>\n              <li>\n                <a class=\"core-footer__link link--alt\" href=\"/foundation/en/imprint\">Imprint</a>\n              </li>\n              <li>\n                <a class=\"core-footer__link link--alt\" href=\"/foundation/en/cookie-policy\">Cookies</a>\n              </li>\n                <li>\n                  <wf-fetch-modal\n                    href=\"/foundation/en/partials/footer-modal-report-content?page=foundation/dsa\"\n                    selector=\"wf-report-content-modal\"\n                  >\n                    <a class=\"core-footer__link link--alt\" href=\"javascript:void(0)\">\n                      Report Content\n                    </a>\n                  </wf-fetch-modal>\n                </li>\n                <li>\n                  <a class=\"core-footer__link link--alt\" href=\"/foundation/en/european-accessibility-act\">\n                    Accessibility Statement\n                  </a>\n                </li>\n            </ul>\n          </nav>\n        <core-fetch-modal\n          href=\"/foundation/en/partials/footer-modal?page=%2Fsearch%2F%7Blang%7D\">\n        <button class=\"core-footer__language-btn\" aria-label=\"change language\">\n          <span class=\"icon\" aria-hidden=\"true\">language</span>\n          <span class=\"core-footer__current-lang\">English</span>\n          <core-loader class=\"core-loader--dots\"></core-loader>\n        </button>\n        </core-fetch-modal>\n    </footer>\n  </core-footer>\n  \n    <script\n      src=\"https://cdn.cookielaw.org/scripttemplates/otSDKStub.js\"\n      type=\"text/javascript\"\n      charset=\"UTF-8\"\n      data-domain-script=\"b70b70b5-60ae-4d91-8153-d4a737a2c5fe\"\n      data-document-language=\"true\">\n    </script>\n    <script>\n      function OptanonWrapper() {\n        window.dispatchEvent(new CustomEvent('consentChange', { detail: { onetrustActiveGroups: window.OnetrustActiveGroups } }))\n      }\n    </script>\n  <script src=\"https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/pl-web-foundation-footer-3.63.3-146c6753dee0b77e9ffe833831d7adba.js\" crossorigin=\"anonymous\"></script>\n  <link rel=\"stylesheet\" href=\"https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/pl-web-foundation-footer-3.63.3-7eeea7600f85cb74e2c24554e4440bb5.css\" />\n  <core-tos-privacy-update\n    update-url=\"/consent/web/customers/en/consent-update-flow\"\n    button-text=\"Accept\"\n    default-headline=\"Our Privacy Policy or Terms of Service have changed.\"\n    autoload-condition=\"html.is-authenticated\"\n  ></core-tos-privacy-update>\n  <core-feedback \n    url-api=\"/commerce/api/subscriptions/churn-feedback\"\n    url-modal=\"/commerce/en/subscriptions/churn-feedback\"\n    url-api-skip=\"/commerce/api/subscriptions/churn-feedback/skip\"\n    message-success=\"Your feedback has been sent. Thank you very much!\"\n    message-error=\"An error has occurred, your feedback could not be sent. Please try again.\"\n    call-on-init=\"true\">\n  </core-feedback>\n    <!-- Snowplow starts plowing -->\n    <meta name=\"xRequestMarket\" content=\"xp\">\n    <meta name=\"marketCode\" content=\"xp\">\n    <meta name=\"snowplowConnector\" content=\"https://c.cookidoo.international\">\n    <meta name=\"snowplowAppId\" content=\"cookidoo\">\n    \n    <script type=\"text/javascript\">\n      window.addEventListener(\"consentChange\", function(e) {\n        const oneTrustGroups = window.OnetrustActiveGroups\n        const userGivesConsent = oneTrustGroups.includes('C0002')\n        if (!userGivesConsent) {\n          if (!window.snowplow) return\n          window.snowplow('disableButtonClickTracking');\n          window.snowplow('disableActivityTracking');\n          window.snowplow('disableActivityTrackingCallback');\n          window.snowplow('flushBuffer');\n          window.snowplow('clearUserData');\n          window.snowplow = undefined\n          return\n        }\n    \n    \n        ;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[]; p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments) };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1; n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,\"script\",'/foundation/assets/qdyrnotslk.js',\"snowplow\"));\n    \n        const devMode = localStorage.getItem('snowplowDebug') === 'true'\n        window.snowplow('newTracker', 'sp1', 'https://c.cookidoo.international', {\n          appId: 'cookidoo',\n          ...(devMode ? {\n            eventMethod: 'get',\n            credentials: 'omit',\n          } : {}),\n          discoverRootDomain: true,\n          cookieSameSite: 'Lax',\n          contexts: {\n            session: true,\n            performanceTiming: true,\n          },\n          plugins: []\n        });\n    \n        if (window.snowplowReady) {\n          window.snowplowResolve && window.snowplowResolve()\n          return\n        }\n        window.snowplowReady = new Promise(r => r())\n      })\n    </script>\n  \n  <style scoped>\n    @media only screen and (min-width: 1333px) {\n      .footer-copyright {\n        margin-bottom: 1.5rem;\n        margin-top: -1.5rem;\n      }\n    }\n  </style>\n\n",
+      "staticScripts": [
+        {
+          "src": "https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/pl-core-29.13.1-b7bf79dc4756af26d0acb3d99a6aded2.js"
+        },
+        {
+          "src": "https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/auth-29.13.1-1c3d4f2e0805d6df74db45c0a1a395be.js",
+          "strategy": "beforeInteractive"
+        },
+        {
+          "src": "https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/cicd2-theme-29.13.1-204cc4f5230e2c39f99112e887ceb427.js"
+        }
+      ],
+      "staticAssets": {
+        "manifestOrigin": "https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com",
+        "assetDomain": "https://assets.tmecosys.com",
+        "favIcon": "https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/favicon-02a92602e0cf506ebd0186892a17fd82.ico",
+        "logo": "https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/logo_thermomix-02469c2fb4fca55fc3c397286d9e7fe0.svg",
+        "errorImage": "https://patternlib-all.prod.external.eu-tm-prod.vorwerk-digital.com/404-error-4bd24fe5f6a145edf21d9fb14e3ad0d0.svg"
+      },
+      "filterValues": {
+        "categories": [
+          {
+            "value": "VrkNavCategory-RPF-001",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-001",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-001",
+            "label": "tmde.general.category.string.starters",
+            "icon": "starters"
+          },
+          {
+            "value": "VrkNavCategory-RPF-002",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-002",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-002",
+            "label": "tmde.general.category.string.soups",
+            "icon": "soups"
+          },
+          {
+            "value": "VrkNavCategory-RPF-003",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-003",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-003",
+            "label": "tmde.general.category.string.pastaandrice",
+            "icon": "pasta-and-rice-dishes"
+          },
+          {
+            "value": "VrkNavCategory-RPF-004",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-004",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-004",
+            "label": "tmde.general.category.string.maindishesmeat",
+            "icon": "main-dishes-meat"
+          },
+          {
+            "value": "VrkNavCategory-RPF-005",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-005",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-005",
+            "label": "tmde.general.category.string.maindishesfish",
+            "icon": "main-dishes-fish"
+          },
+          {
+            "value": "VrkNavCategory-RPF-006",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-006",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-006",
+            "label": "tmde.general.category.string.maindishesvegetarian",
+            "icon": "main-dishes-vegetarian"
+          },
+          {
+            "value": "VrkNavCategory-RPF-007",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-007",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-007",
+            "label": "tmde.general.category.string.maindishesother",
+            "icon": "main-dishes-other"
+          },
+          {
+            "value": "VrkNavCategory-RPF-008",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-008",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-008",
+            "label": "tmde.general.category.string.sidedishes",
+            "icon": "side-dishes"
+          },
+          {
+            "value": "VrkNavCategory-RPF-009",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-009",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-009",
+            "label": "tmde.general.category.string.saucessweet",
+            "icon": "sauces-dips-and-spreads-sweet"
+          },
+          {
+            "value": "VrkNavCategory-RPF-011",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-011",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-011",
+            "label": "tmde.general.category.string.desserts",
+            "icon": "desserts-and-sweets"
+          },
+          {
+            "value": "VrkNavCategory-RPF-012",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-012",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-012",
+            "label": "tmde.general.category.string.bakingsavoury",
+            "icon": "baking-savoury"
+          },
+          {
+            "value": "VrkNavCategory-RPF-013",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-013",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-013",
+            "label": "tmde.general.category.string.bakingsweet",
+            "icon": "baking-sweet"
+          },
+          {
+            "value": "VrkNavCategory-RPF-014",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-014",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-014",
+            "label": "tmde.general.category.string.breads",
+            "icon": "breads-and-rolls"
+          },
+          {
+            "value": "VrkNavCategory-RPF-015",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-015",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-015",
+            "label": "tmde.general.category.string.drinks",
+            "icon": "drinks"
+          },
+          {
+            "value": "VrkNavCategory-RPF-016",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-016",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-016",
+            "label": "tmde.general.category.string.basics",
+            "icon": "basics"
+          },
+          {
+            "value": "VrkNavCategory-RPF-017",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-017",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-017",
+            "label": "tmde.general.category.string.babyfood",
+            "icon": "baby-food"
+          },
+          {
+            "value": "VrkNavCategory-RPF-018",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-018",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-018",
+            "label": "tmde.general.category.string.saucessavoury",
+            "icon": "sauces-dips-and-spreads-sweet"
+          },
+          {
+            "value": "VrkNavCategory-RPF-019",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-019",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-019",
+            "label": "tmde.general.category.string.breakfast",
+            "icon": "breakfast"
+          },
+          {
+            "value": "VrkNavCategory-RPF-020",
+            "searchFilterValue": "categories.id:VrkNavCategory-RPF-020",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavCategory-RPF-020",
+            "label": "tmde.general.category.string.snacks",
+            "icon": "snacks"
+          },
+          {
+            "value": "VrkNavigationCategory-rpf-000001303095",
+            "searchFilterValue": "categories.id:VrkNavigationCategory-rpf-000001303095",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.categories.id.value:VrkNavigationCategory-rpf-000001303095",
+            "label": "tmde.general.category.string.menus",
+            "icon": "menus-and-more"
+          }
+        ],
+        "ingredients": [],
+        "excludeIngredients": [],
+        "tags": [],
+        "difficulty": [
+          {
+            "value": "easy",
+            "searchFilterValue": "difficulty:\"easy\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.difficulty.value:\"easy\"",
+            "label": "tmde.recipe.icon.label.difficulty.easy"
+          },
+          {
+            "value": "medium",
+            "searchFilterValue": "difficulty:\"medium\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.difficulty.value:\"medium\"",
+            "label": "tmde.recipe.icon.label.difficulty.medium"
+          },
+          {
+            "value": "advanced",
+            "searchFilterValue": "difficulty:\"advanced\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.difficulty.value:\"advanced\"",
+            "label": "tmde.recipe.icon.label.difficulty.advanced"
+          }
+        ],
+        "preparationTime": [
+          {
+            "value": "900",
+            "label": "≤ 15",
+            "searchFilterValue": "preparationTime <= 900"
+          },
+          {
+            "value": "1800",
+            "label": "≤ 30",
+            "searchFilterValue": "preparationTime <= 1800"
+          },
+          {
+            "value": "2700",
+            "label": "≤ 45",
+            "searchFilterValue": "preparationTime <= 2700"
+          }
+        ],
+        "totalTime": [
+          {
+            "value": "900",
+            "label": "≤ 15",
+            "searchFilterValue": "totalTime <= 900"
+          },
+          {
+            "value": "1800",
+            "label": "≤ 30",
+            "searchFilterValue": "totalTime <= 1800"
+          },
+          {
+            "value": "2700",
+            "label": "≤ 45",
+            "searchFilterValue": "totalTime <= 2700"
+          }
+        ],
+        "portions": [
+          {
+            "value": "1",
+            "searchFilterValue": "portions = 1",
+            "helptext": "tmde.search.filter.modal.portions.selection"
+          },
+          {
+            "value": "2",
+            "searchFilterValue": "portions = 2",
+            "helptext": "tmde.search.filter.modal.portions.selection"
+          },
+          {
+            "value": "4",
+            "searchFilterValue": "portions = 4",
+            "helptext": "tmde.search.filter.modal.portions.selection"
+          },
+          {
+            "value": "6",
+            "searchFilterValue": "portions = 6",
+            "helptext": "tmde.search.filter.modal.portions.selection"
+          },
+          {
+            "value": "8",
+            "label": "8+",
+            "searchFilterValue": "portions >= 8",
+            "helptext": "tmde.search.filter.modal.portions.selection"
+          }
+        ],
+        "ratings": [
+          {
+            "value": "1",
+            "searchFilterValue": "normalizedRating:\"1\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.normalizedRating.value:\"1\""
+          },
+          {
+            "value": "2",
+            "searchFilterValue": "normalizedRating:\"2\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.normalizedRating.value:\"2\""
+          },
+          {
+            "value": "3",
+            "searchFilterValue": "normalizedRating:\"3\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.normalizedRating.value:\"3\""
+          },
+          {
+            "value": "4",
+            "searchFilterValue": "normalizedRating:\"4\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.normalizedRating.value:\"4\""
+          },
+          {
+            "value": "5",
+            "searchFilterValue": "normalizedRating:\"5\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.normalizedRating.value:\"5\""
+          }
+        ],
+        "tmv": [
+          {
+            "value": "TM7only",
+            "searchFilterValue": "tmversion:\"TM7\" AND NOT tmversion:\"TM6\" AND NOT tmversion:\"TM5\" AND NOT tmversion:\"TM31\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.tmversion.value:\"TM7\" AND NOT {indexName}.facets.exact_matches.tmversion.value:\"TM6\" AND NOT {indexName}.facets.exact_matches.tmversion.value:\"TM5\" AND NOT {indexName}.facets.exact_matches.tmversion.value:\"TM31\"",
+            "label": "tmde.search.filter.list.entry.tm7only"
+          },
+          {
+            "value": "TM6only",
+            "searchFilterValue": "tmversion:\"TM6\" AND NOT tmversion:\"TM5\" AND NOT tmversion:\"TM31\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.tmversion.value:\"TM6\" AND NOT {indexName}.facets.exact_matches.tmversion.value:\"TM5\" AND NOT {indexName}.facets.exact_matches.tmversion.value:\"TM31\"",
+            "label": "tmde.search.filter.list.entry.tm6only"
+          },
+          {
+            "value": "TM7",
+            "searchFilterValue": "tmversion:\"TM7\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.tmversion.value:\"TM7\"",
+            "label": "tmde.search.filter.list.entry.tm7"
+          },
+          {
+            "value": "TM6",
+            "searchFilterValue": "tmversion:\"TM6\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.tmversion.value:\"TM6\"",
+            "label": "tmde.search.filter.list.entry.tm6"
+          },
+          {
+            "value": "TM5",
+            "searchFilterValue": "tmversion:\"TM5\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.tmversion.value:\"TM5\"",
+            "label": "tmde.search.filter.list.entry.tm5"
+          },
+          {
+            "value": "TM31",
+            "searchFilterValue": "tmversion:\"TM31\"",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.tmversion.value:\"TM31\"",
+            "label": "tmde.search.filter.list.entry.tm31"
+          }
+        ],
+        "additionalDevices": [
+          {
+            "value": "includingFriend",
+            "searchFilterValue": "additionalDevices:cooking_station OR NOT additionalDevices:cooking_station",
+            "label": "tmde.search.filter.button.withtmf"
+          },
+          {
+            "value": "cooking_station",
+            "searchFilterValue": "additionalDevices:cooking_station",
+            "suggestionLabel": "tmde.search.filter.suggestion.additionaldevices",
+            "label": "tmde.search.filter.button.onlytmf"
+          }
+        ],
+        "accessories": [
+          {
+            "value": "cutter",
+            "label": "tmde.general.cutter",
+            "searchFilterValue": "accessories:\"cutter\""
+          },
+          {
+            "value": "blade_cover",
+            "label": "tmde.general.bladecover",
+            "searchFilterValue": "accessories:\"blade_cover\""
+          },
+          {
+            "value": "cooking_station",
+            "label": "tmde.general.tmf.individual.r",
+            "searchFilterValue": "accessories:\"cooking_station\""
+          },
+          {
+            "value": "peeler",
+            "label": "tmde.general.peelershort",
+            "searchFilterValue": "accessories:\"peeler\""
+          },
+          {
+            "value": "sensor",
+            "searchValue": "thermomix_sensor",
+            "label": "tmde.general.sensor",
+            "searchFilterValue": "accessories:\"thermomix_sensor\""
+          },
+          {
+            "value": "includingSensor",
+            "filterType": "including",
+            "searchValue": "thermomix_sensor",
+            "label": "tmde.general.sensor"
+          },
+          {
+            "value": "includingFriend",
+            "label": "tmde.general.tmf.individual.r",
+            "filterType": "including"
+          },
+          {
+            "value": "includingBladeCover",
+            "label": "tmde.general.bladecover",
+            "filterType": "including"
+          },
+          {
+            "value": "includingBladeCoverWithPeeler",
+            "label": "tmde.general.peeler",
+            "filterType": "including"
+          },
+          {
+            "value": "includingCutter",
+            "label": "tmde.general.cutter",
+            "filterType": "including"
+          },
+          {
+            "value": "includingCutterPlus",
+            "label": "tmde.general.cutterplus",
+            "filterType": "including"
+          }
+        ],
+        "languages": [
+          {
+            "value": "cs",
+            "searchFilterValue": "language:cs",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:cs",
+            "label": "tmde.general.language.czech"
+          },
+          {
+            "value": "de",
+            "searchFilterValue": "language:de",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:de",
+            "label": "tmde.general.language.german"
+          },
+          {
+            "value": "en",
+            "searchFilterValue": "language:en",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:en",
+            "label": "tmde.general.language.english"
+          },
+          {
+            "value": "es",
+            "searchFilterValue": "language:es",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:es",
+            "label": "tmde.general.language.spanish"
+          },
+          {
+            "value": "fr",
+            "searchFilterValue": "language:fr",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:fr",
+            "label": "tmde.general.language.french"
+          },
+          {
+            "value": "it",
+            "searchFilterValue": "language:it",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:it",
+            "label": "tmde.general.language.italian"
+          },
+          {
+            "value": "nl",
+            "searchFilterValue": "language:nl",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:nl",
+            "label": "tmde.general.language.dutch"
+          },
+          {
+            "value": "pl",
+            "searchFilterValue": "language:pl",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:pl",
+            "label": "tmde.general.language.polish"
+          },
+          {
+            "value": "pt",
+            "searchFilterValue": "language:pt",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:pt",
+            "label": "tmde.general.language.portuguese"
+          },
+          {
+            "value": "el",
+            "searchFilterValue": "language:el",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:el",
+            "label": "tmde.general.language.el"
+          },
+          {
+            "value": "ro",
+            "searchFilterValue": "language:ro",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:ro",
+            "label": "tmde.general.language.ro"
+          },
+          {
+            "value": "ru",
+            "searchFilterValue": "language:ru",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:ru",
+            "label": "tmde.general.language.ru"
+          },
+          {
+            "value": "da",
+            "searchFilterValue": "language:da",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:da",
+            "label": "tmde.general.language.dk"
+          },
+          {
+            "value": "zh-Hant",
+            "searchFilterValue": "language:zh-Hant",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:zh-Hant",
+            "label": "tmde.general.language.tradchinese"
+          },
+          {
+            "value": "zh-Hans",
+            "searchFilterValue": "language:zh-Hans",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:zh-Hans",
+            "label": "tmde.general.language.simpchinese"
+          },
+          {
+            "value": "hu",
+            "searchFilterValue": "language:hu",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:hu",
+            "label": "tmde.general.language.hungarian"
+          },
+          {
+            "value": "is",
+            "searchFilterValue": "language:is",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:is",
+            "label": "tmde.general.language.icelandic"
+          },
+          {
+            "value": "sv",
+            "searchFilterValue": "language:sv",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:sv",
+            "label": "tmde.general.language.swedish"
+          },
+          {
+            "value": "no",
+            "searchFilterValue": "language:no",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:no",
+            "label": "tmde.general.language.norwegian"
+          },
+          {
+            "value": "tr",
+            "searchFilterValue": "language:tr",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:tr",
+            "label": "tmde.general.language.turkish"
+          },
+          {
+            "value": "id",
+            "searchFilterValue": "language:id",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:id",
+            "label": "tmde.general.language.indonesian"
+          },
+          {
+            "value": "vi",
+            "searchFilterValue": "language:vi",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:vi",
+            "label": "tmde.general.language.vietnamese"
+          },
+          {
+            "value": "bg",
+            "searchFilterValue": "language:bg",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:bg",
+            "label": "tmde.general.language.bulgarian"
+          },
+          {
+            "value": "ar",
+            "searchFilterValue": "language:ar",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:ar",
+            "label": "tmde.general.language.arabic"
+          },
+          {
+            "value": "pt-BR",
+            "searchFilterValue": "language:pt-BR",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.language.value:pt-BR",
+            "label": "tmde.general.language.portuguese-brazil"
+          }
+        ],
+        "countries": [
+          {
+            "value": "de",
+            "searchFilterValue": "countries:de",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:de",
+            "label": "tmde.general.country.germany"
+          },
+          {
+            "value": "it",
+            "searchFilterValue": "countries:it",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:it",
+            "label": "tmde.general.country.italy"
+          },
+          {
+            "value": "fr",
+            "searchFilterValue": "countries:fr",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:fr",
+            "label": "tmde.general.country.france"
+          },
+          {
+            "value": "ch",
+            "searchFilterValue": "countries:ch",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ch",
+            "label": "tmde.general.country.switzerland"
+          },
+          {
+            "value": "es",
+            "searchFilterValue": "countries:es",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:es",
+            "label": "tmde.general.country.spain"
+          },
+          {
+            "value": "at",
+            "searchFilterValue": "countries:at",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:at",
+            "label": "tmde.general.country.austria"
+          },
+          {
+            "value": "pl",
+            "searchFilterValue": "countries:pl",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:pl",
+            "label": "tmde.general.country.poland"
+          },
+          {
+            "value": "pt",
+            "searchFilterValue": "countries:pt",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:pt",
+            "label": "tmde.general.country.portugal"
+          },
+          {
+            "value": "mx",
+            "searchFilterValue": "countries:mx",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:mx",
+            "label": "tmde.general.country.mexico"
+          },
+          {
+            "value": "gb",
+            "searchFilterValue": "countries:gb",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:gb",
+            "label": "tmde.general.country.uk"
+          },
+          {
+            "value": "cz",
+            "searchFilterValue": "countries:cz",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:cz",
+            "label": "tmde.general.country.czechrepublic"
+          },
+          {
+            "value": "au",
+            "searchFilterValue": "countries:au",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:au",
+            "label": "tmde.general.country.australia"
+          },
+          {
+            "value": "tw",
+            "searchFilterValue": "countries:tw",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:tw",
+            "label": "tmde.general.country.taiwan"
+          },
+          {
+            "value": "us",
+            "searchFilterValue": "countries:us",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:us",
+            "label": "tmde.general.country.usa"
+          },
+          {
+            "value": "be",
+            "searchFilterValue": "countries:be",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:be",
+            "label": "tmde.general.country.belgium"
+          },
+          {
+            "value": "cn",
+            "searchFilterValue": "countries:cn",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:cn",
+            "label": "tmde.general.country.china"
+          },
+          {
+            "value": "ro",
+            "searchFilterValue": "countries:ro",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ro",
+            "label": "tmde.general.country.romania"
+          },
+          {
+            "value": "ca",
+            "searchFilterValue": "countries:ca",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ca",
+            "label": "tmde.general.country.canada"
+          },
+          {
+            "value": "tr",
+            "searchFilterValue": "countries:tr",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:tr",
+            "label": "tmde.general.country.turkey"
+          },
+          {
+            "value": "cy",
+            "searchFilterValue": "countries:cy",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:cy",
+            "label": "tmde.general.country.cyprus"
+          },
+          {
+            "value": "my",
+            "searchFilterValue": "countries:my",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:my",
+            "label": "tmde.general.country.malaysia"
+          },
+          {
+            "value": "id",
+            "searchFilterValue": "countries:id",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:id",
+            "label": "tmde.general.country.indonesia"
+          },
+          {
+            "value": "sg",
+            "searchFilterValue": "countries:sg",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:sg",
+            "label": "tmde.general.country.singapore"
+          },
+          {
+            "value": "dk",
+            "searchFilterValue": "countries:dk",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:dk",
+            "label": "tmde.general.country.denmark"
+          },
+          {
+            "value": "no",
+            "searchFilterValue": "countries:no",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:no",
+            "label": "tmde.general.country.norway"
+          },
+          {
+            "value": "is",
+            "searchFilterValue": "countries:is",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:is",
+            "label": "tmde.general.country.iceland"
+          },
+          {
+            "value": "se",
+            "searchFilterValue": "countries:se",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:se",
+            "label": "tmde.general.country.sweden"
+          },
+          {
+            "value": "hu",
+            "searchFilterValue": "countries:hu",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:hu",
+            "label": "tmde.general.country.hungary"
+          },
+          {
+            "value": "br",
+            "searchFilterValue": "countries:br",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:br",
+            "label": "tmde.general.country.brazil"
+          },
+          {
+            "value": "vn",
+            "searchFilterValue": "countries:vn",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:vn",
+            "label": "tmde.general.country.vietnam"
+          },
+          {
+            "value": "gr",
+            "searchFilterValue": "countries:gr",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:gr",
+            "label": "tmde.general.country.greece"
+          },
+          {
+            "value": "ar",
+            "searchFilterValue": "countries:ar",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ar",
+            "label": "tmde.general.country.argentina"
+          },
+          {
+            "value": "cl",
+            "searchFilterValue": "countries:cl",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:cl",
+            "label": "tmde.general.country.chile"
+          },
+          {
+            "value": "co",
+            "searchFilterValue": "countries:co",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:co",
+            "label": "tmde.general.country.colombia"
+          },
+          {
+            "value": "gt",
+            "searchFilterValue": "countries:gt",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:gt",
+            "label": "tmde.general.country.guatemala"
+          },
+          {
+            "value": "pa",
+            "searchFilterValue": "countries:pa",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:pa",
+            "label": "tmde.general.country.panama"
+          },
+          {
+            "value": "pe",
+            "searchFilterValue": "countries:pe",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:pe",
+            "label": "tmde.general.country.peru"
+          },
+          {
+            "value": "py",
+            "searchFilterValue": "countries:py",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:py",
+            "label": "tmde.general.country.paraguay"
+          },
+          {
+            "value": "sa",
+            "searchFilterValue": "countries:sa",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:sa",
+            "label": "tmde.general.country.saudiarabia"
+          },
+          {
+            "value": "ae",
+            "searchFilterValue": "countries:ae",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ae",
+            "label": "tmde.general.country.uae"
+          },
+          {
+            "value": "nl",
+            "searchFilterValue": "countries:nl",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:nl",
+            "label": "tmde.general.country.netherlands"
+          },
+          {
+            "value": "ru",
+            "searchFilterValue": "countries:ru",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ru",
+            "label": "tmde.general.country.russia"
+          },
+          {
+            "value": "ma",
+            "searchFilterValue": "countries:ma",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ma",
+            "label": "tmde.general.country.morocco"
+          },
+          {
+            "value": "bg",
+            "searchFilterValue": "countries:bg",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:bg",
+            "label": "tmde.general.country.bulgaria"
+          },
+          {
+            "value": "eg",
+            "searchFilterValue": "countries:eg",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:eg",
+            "label": "tmde.general.country.egypt"
+          },
+          {
+            "value": "il",
+            "searchFilterValue": "countries:il",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:il",
+            "label": "tmde.general.country.israel"
+          },
+          {
+            "value": "ph",
+            "searchFilterValue": "countries:ph",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:ph",
+            "label": "tmde.general.country.philippines"
+          },
+          {
+            "value": "th",
+            "searchFilterValue": "countries:th",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:th",
+            "label": "tmde.general.country.thailand"
+          },
+          {
+            "value": "cr",
+            "searchFilterValue": "countries:cr",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:cr",
+            "label": "tmde.general.country.costarica"
+          },
+          {
+            "value": "tn",
+            "searchFilterValue": "countries:tn",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:tn",
+            "label": "tmde.general.country.tunisia"
+          },
+          {
+            "value": "om",
+            "searchFilterValue": "countries:om",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:om",
+            "label": "tmde.general.country.oman"
+          },
+          {
+            "value": "qa",
+            "searchFilterValue": "countries:qa",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:qa",
+            "label": "tmde.general.country.qatar"
+          },
+          {
+            "value": "bh",
+            "searchFilterValue": "countries:bh",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:bh",
+            "label": "tmde.general.country.bahrain"
+          },
+          {
+            "value": "za",
+            "searchFilterValue": "countries:za",
+            "suggestionFilterValue": "{indexName}.facets.exact_matches.countries.value:za",
+            "label": "tmde.general.country.southafrica"
+          }
+        ],
+        "ids": [],
+        "excludeTags": [],
+        "exclude": [],
+        "like": []
+      },
+      "algoliaIndices": {
+        "recipes": {
+          "relevance_empty": "recipes-production-by-emptySearchScore",
+          "relevance": "recipes-production",
+          "publishedAt": "recipes-production-by-publishedAt-desc",
+          "title": "recipes-production-by-title-asc",
+          "rating": "recipes-production-by-rating-desc",
+          "totalTime": "recipes-production-by-totalTime-asc",
+          "preparationTime": "recipes-production-by-preparationTime-asc"
+        },
+        "collections": {
+          "relevance": "collections-production",
+          "publishedAt": "collections-production-by-publishedAt-desc",
+          "title": "collections-production-by-title-asc"
+        },
+        "category-suggestions": {
+          "default": "category-suggestions-production"
+        },
+        "suggestions-recipes": {
+          "default": "suggestions-recipes-production"
+        },
+        "editorial": {
+          "default": "editorial-production",
+          "title": "editorial-production-by-title-asc"
+        }
+      },
+      "flagdFeatureFlags": [],
+      "algoliaApiKeyData": {
+        "apiKey": "OTJjZDgyM2QxMjhjNmI1MzI0YjFlNGVhMmZmODAyM2Q2ZDhhNTJkZjJiYzZkNTA2ZWU0YTE4YWMwYThiMTU3ZWF0dHJpYnV0ZXNUb1JldHJpZXZlPWlkJTJDdGl0bGUlMkNpbWFnZSUyQ3JhdGluZyUyQ251bWJlck9mUmF0aW5ncyUyQ3RvdGFsVGltZSUyQ2NhdGVnb3J5JTJDcHVibGlzaGVkQXQlMkNkZXNjcmlwdGlvbiUyQ3VybCZmaWx0ZXJzPWFsbG93ZWRSb2xlcyUzQXB1YmxpYyUyME9SJTIwcmVjaXBlcy1wcm9kdWN0aW9uLmZhY2V0cy5leGFjdF9tYXRjaGVzLmFsbG93ZWRSb2xlcy52YWx1ZSUzQXB1YmxpYyZyZXN0cmljdEluZGljZXM9cmVjaXBlcy1wcm9kdWN0aW9uLWJ5LWVtcHR5U2VhcmNoU2NvcmUlMkNyZWNpcGVzLXByb2R1Y3Rpb24lMkNyZWNpcGVzLXByb2R1Y3Rpb24tYnktcHVibGlzaGVkQXQtZGVzYyUyQ3JlY2lwZXMtcHJvZHVjdGlvbi1ieS10aXRsZS1hc2MlMkNyZWNpcGVzLXByb2R1Y3Rpb24tYnktcmF0aW5nLWRlc2MlMkNyZWNpcGVzLXByb2R1Y3Rpb24tYnktdG90YWxUaW1lLWFzYyUyQ3JlY2lwZXMtcHJvZHVjdGlvbi1ieS1wcmVwYXJhdGlvblRpbWUtYXNjJTJDY2F0ZWdvcnktc3VnZ2VzdGlvbnMtcHJvZHVjdGlvbiUyQ3N1Z2dlc3Rpb25zLXJlY2lwZXMtcHJvZHVjdGlvbiUyQ2NvbGxlY3Rpb25zLXByb2R1Y3Rpb24lMkNjb2xsZWN0aW9ucy1wcm9kdWN0aW9uLWJ5LXB1Ymxpc2hlZEF0LWRlc2MlMkNjb2xsZWN0aW9ucy1wcm9kdWN0aW9uLWJ5LXRpdGxlLWFzYyUyQ2VkaXRvcmlhbC1wcm9kdWN0aW9uJTJDZWRpdG9yaWFsLXByb2R1Y3Rpb24tYnktdGl0bGUtYXNjJnZhbGlkVW50aWw9MTc4MDA1NTA5Mg==",
+        "validUntil": 1780055092,
+        "version": "2.0",
+        "type": "default",
+        "subscriptionLevel": "NONE"
+      }
+    },
+    "__N_SSP": true
+  },
+  "page": "/",
+  "query": {},
+  "buildId": "YsnEh3wxSXit1gCtSO1fA",
+  "assetPrefix": "/search",
+  "isFallback": false,
+  "isExperimentalCompile": false,
+  "gssp": true,
+  "locale": "en",
+  "locales": [
+    "default",
+    "de-AT",
+    "en-AU",
+    "en-NZ",
+    "nl-BE",
+    "fr-BE",
+    "de-BE",
+    "nl",
+    "de",
+    "fr",
+    "en",
+    "de-CH",
+    "fr-CH",
+    "it-CH",
+    "it",
+    "zh-Hans-CN",
+    "zh-CN",
+    "zh",
+    "en-CN",
+    "cs",
+    "de-DE",
+    "es-ES",
+    "es",
+    "fr-FR",
+    "it-IT",
+    "es-MX",
+    "pl",
+    "pl-PL",
+    "pt-PT",
+    "pt",
+    "zh-Hant",
+    "en-GB",
+    "en-US",
+    "en-CA",
+    "fr-CA",
+    "tr-TR",
+    "tr",
+    "el-GR",
+    "el",
+    "vi-VN",
+    "vi",
+    "bg",
+    "ro",
+    "hu",
+    "zh-Hans",
+    "id",
+    "pt-BR",
+    "ar",
+    "ru",
+    "kk"
+  ],
+  "defaultLocale": "default",
+  "scriptLoader": []
+}
