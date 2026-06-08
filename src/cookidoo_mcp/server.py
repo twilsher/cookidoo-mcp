@@ -459,6 +459,33 @@ async def clear_shopping_list(confirmed: bool = False) -> dict[str, str]:
 # Priority 3 — Meal Calendar
 # ---------------------------------------------------------------------------
 
+async def _read_back_day(target: date) -> dict[str, Any]:
+    """Re-fetch the actual state of a single calendar day (stock + custom merged).
+
+    Use this after any calendar mutation rather than trusting the write call's
+    response body — both add_custom_recipes_to_calendar and remove_*_from_calendar
+    return responses that don't reflect the side effect (custom recipes missing
+    after add, removed recipes still present after delete).
+    """
+    days, custom_ids_by_day = await asyncio.gather(
+        _client.call(lambda api, t=target: api.get_recipes_in_calendar_week(t)),
+        _fetch_custom_recipe_ids_for_week(target),
+    )
+    target_key = target.isoformat()
+    matching_day = next((d for d in days if d.id == target_key), None)
+    custom_ids = custom_ids_by_day.get(target_key, [])
+    custom_recipes = await _fetch_custom_recipes(set(custom_ids))
+    extras = [custom_recipes[rid] for rid in custom_ids if rid in custom_recipes]
+
+    if matching_day is not None:
+        return _format_calendar_day(matching_day, extra_recipes=extras)
+    return {
+        "id": target_key,
+        "title": target_key,
+        "recipes": [_format_recipe_summary(r) for r in extras],
+    }
+
+
 @mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 async def get_calendar_week(date: str = "") -> list[dict[str, Any]]:
     """View the meal plan for the week containing the given date.
@@ -492,6 +519,10 @@ async def add_to_calendar(
 ) -> dict[str, Any]:
     """Schedule recipes for a specific day in the meal calendar.
 
+    Returns a confirmation envelope with the actual post-call day state
+    (re-read after the mutation), since the underlying API responses can
+    be misleading for custom recipes.
+
     Args:
         recipe_ids: List of Cookidoo recipe IDs to add.
         date: ISO date string for the target day (e.g. "2025-03-15").
@@ -503,12 +534,22 @@ async def add_to_calendar(
     standard_ids = [rid for rid in recipe_ids if not _is_custom_recipe_id(rid)]
     custom_ids = [rid for rid in recipe_ids if _is_custom_recipe_id(rid)]
 
-    day = None
     if standard_ids:
-        day = await _client.call(lambda api, t=target, s=standard_ids: api.add_recipes_to_calendar(t, s))
+        await _client.call(lambda api, t=target, s=standard_ids: api.add_recipes_to_calendar(t, s))
     if custom_ids:
-        day = await _client.call(lambda api, t=target, c=custom_ids: api.add_custom_recipes_to_calendar(t, c))
-    return _format_calendar_day(day)
+        await _client.call(lambda api, t=target, c=custom_ids: api.add_custom_recipes_to_calendar(t, c))
+
+    day = await _read_back_day(target)
+    scheduled_ids = {r["id"] for r in day["recipes"]}
+    missing = [rid for rid in recipe_ids if rid not in scheduled_ids]
+    return {
+        "success": not missing,
+        "action": "added",
+        "recipe_ids": recipe_ids,
+        "date": target.isoformat(),
+        "missing_after_readback": missing,
+        "day": day,
+    }
 
 
 @mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
@@ -516,6 +557,10 @@ async def remove_from_calendar(
     recipe_id: str, date: str, confirmed: bool = False
 ) -> dict[str, Any]:
     """Remove a recipe from a specific day in the meal calendar.
+
+    Returns a confirmation envelope with the actual post-call day state
+    (re-read after the mutation), since the underlying API response can
+    still show the removed recipe.
 
     Args:
         recipe_id: The Cookidoo recipe ID to remove.
@@ -525,7 +570,17 @@ async def remove_from_calendar(
     _require_confirmed(confirmed)
     target = _parse_date(date)
     if _is_custom_recipe_id(recipe_id):
-        day = await _client.call(lambda api, t=target, r=recipe_id: api.remove_custom_recipe_from_calendar(t, r))
+        await _client.call(lambda api, t=target, r=recipe_id: api.remove_custom_recipe_from_calendar(t, r))
     else:
-        day = await _client.call(lambda api, t=target, r=recipe_id: api.remove_recipe_from_calendar(t, r))
-    return _format_calendar_day(day)
+        await _client.call(lambda api, t=target, r=recipe_id: api.remove_recipe_from_calendar(t, r))
+
+    day = await _read_back_day(target)
+    still_present = recipe_id in {r["id"] for r in day["recipes"]}
+    return {
+        "success": not still_present,
+        "action": "removed",
+        "recipe_id": recipe_id,
+        "date": target.isoformat(),
+        "still_present_after_readback": still_present,
+        "day": day,
+    }

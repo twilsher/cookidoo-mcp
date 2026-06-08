@@ -44,22 +44,41 @@ First confirmed-working call: `01KTECKZHEN6EE20HF7WH8E9RC` (Pan-Seared Cod),
 
 ---
 
-## 2. Calendar mutation responses are misleading
+## 2. Calendar mutation responses are misleading — mitigated at the tool layer
 
-Two specific cases where the immediate response doesn't reflect the
-side-effect:
+Two specific cases where the underlying `cookidoo-api` library responses don't
+reflect the side effect:
 
 - `add_custom_recipes_to_calendar(date, [ulid])` returns a day object with
   `recipes: []`. The recipe IS scheduled — the library's `CookidooCalendarDay`
   dataclass simply doesn't surface `customerRecipeIds`.
-- `remove_from_calendar(date, recipe_id)` response body can still show the
+- `remove_*_from_calendar(date, recipe_id)` response body can still show the
   removed recipe in the day's block.
 
-**Read-back pattern**: trust the side-effect, not the response body. Use
-`cookidoo_get_my_week` (the merged endpoint that surfaces both stock + custom
-via `_fetch_custom_recipe_ids_for_week`) — **not** `get_calendar_week` and
-**not** the library's `get_recipes_in_calendar_week`, both of which drop
-custom recipes.
+**Mitigation (server-side, since 2026-06-08):** `add_to_calendar` and
+`remove_from_calendar` MCP tools no longer return the raw write-call response.
+They internally call `_read_back_day(target)` after the mutation — which uses
+the same merged `get_recipes_in_calendar_week` + `_fetch_custom_recipe_ids_for_week`
+path as `get_calendar_week` — and return an envelope:
+
+```json
+{
+  "success": true,
+  "action": "added" | "removed",
+  "recipe_ids": [...] | "recipe_id": "...",
+  "date": "YYYY-MM-DD",
+  "missing_after_readback": [...]      // for add
+  "still_present_after_readback": bool // for remove
+  "day": { ...actual post-call day state... }
+}
+```
+
+Consumers can trust `success` at face value; the `day` field is the verified
+post-call state, not the misleading library response.
+
+If you're writing a NEW calendar mutation tool, route the read-back through
+`_read_back_day(target)` rather than returning the library response directly.
+The library response will lie to you.
 
 ---
 
