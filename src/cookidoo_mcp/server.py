@@ -202,7 +202,27 @@ def _format_steps(raw_recipe: dict[str, Any]) -> list[dict[str, Any]]:
     return steps
 
 
+async def _get_custom_recipe_payload(recipe_id: str) -> dict[str, Any]:
+    recipe = await _client.call(lambda api: api.get_custom_recipe(recipe_id))
+    return {
+        "id": recipe.id,
+        "name": _sanitize(recipe.name),
+        "url": recipe.url,
+        "active_time_seconds": recipe.active_time,
+        "total_time_seconds": recipe.total_time,
+        "serving_size": recipe.serving_size,
+        "thumbnail": recipe.thumbnail,
+        "image": recipe.image,
+        "ingredients": [_sanitize(i) for i in recipe.ingredients],
+        "instructions": [_sanitize(i) for i in recipe.instructions],
+        "tools": [_sanitize(t) for t in recipe.tools],
+        "is_custom": True,
+    }
+
+
 async def _get_recipe_payload(recipe_id: str) -> dict[str, Any]:
+    if _is_custom_recipe_id(recipe_id):
+        return await _get_custom_recipe_payload(recipe_id)
     details = await _client.call(lambda api: api.get_recipe_details(recipe_id))
     raw_recipe = await _get_raw_recipe(recipe_id)
     return {
@@ -299,8 +319,13 @@ async def cookidoo_search_recipes(
 async def cookidoo_get_recipe(recipe_id: str) -> dict[str, Any]:
     """Get a Cookidoo recipe by ID, including ingredients and preparation steps.
 
+    Handles both stock catalog recipes (`r`-prefixed IDs, e.g. `r907001`) and
+    user-created custom recipes (26-char ULIDs, e.g. `01KTZV61YS0WT7BXVZJQWYS2JF`).
+    Custom recipes return a flatter payload (ingredients/instructions/tools as
+    plain string lists, no nutrition/categories/collections) — see `is_custom`.
+
     Args:
-        recipe_id: The Cookidoo recipe ID (e.g. "r907001").
+        recipe_id: The Cookidoo recipe ID.
     """
     return await _get_recipe_payload(recipe_id)
 
