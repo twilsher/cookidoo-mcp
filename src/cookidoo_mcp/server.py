@@ -387,12 +387,22 @@ async def cookidoo_http_request(
     path: str,
     body: dict[str, Any] | None = None,
     query: dict[str, Any] | None = None,
+    headers: dict[str, str] | None = None,
     confirmed: bool = False,
 ) -> dict[str, Any]:
     """Execute a raw Cookidoo API request with the stored session.
 
     Non-GET requests require confirmed=true after explicit user approval.
     Use relative API paths, e.g. "shopping/en-US" or "planning/en-US/api/my-week/2026-05-16".
+
+    Non-2xx responses are returned intact as ``{"status", "url", "body"}`` so
+    the caller can inspect a 400's error payload. Only 401 triggers an
+    automatic relogin retry — every other status is surfaced to the caller.
+
+    Args:
+        headers: Additional request headers merged over the default
+            ``Accept: application/json``. Use for vendor MIME types like
+            ``application/vnd.vorwerk.created-recipes.mobile+json``.
     """
     if method != HttpMethod.GET:
         _require_confirmed(confirmed)
@@ -402,6 +412,7 @@ async def cookidoo_http_request(
         path,
         body=body,
         query=query,
+        headers=headers,
     )
 
 

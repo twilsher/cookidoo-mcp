@@ -155,22 +155,25 @@ class CookidooClient:
         path: str,
         body: dict[str, Any] | None,
         query: dict[str, Any] | None,
+        headers: dict[str, str] | None,
     ) -> dict[str, Any]:
         relative_path = path.lstrip("/")
         url = api.api_endpoint / relative_path
+        merged_headers = {**api._api_headers, **(headers or {})}
         async with api._session.request(
             method.upper(),
             url,
-            headers=api._api_headers,
+            headers=merged_headers,
             json=body,
             params=query,
         ) as response:
-            response.raise_for_status()
             content_type = response.headers.get("content-type", "")
             if "application/json" in content_type:
                 data: Any = await response.json()
             else:
                 data = await response.text()
+            if response.status == 401:
+                response.raise_for_status()
             return {"status": response.status, "url": str(response.url), "body": data}
 
     async def raw_request(
@@ -180,16 +183,23 @@ class CookidooClient:
         *,
         body: dict[str, Any] | None = None,
         query: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
     ) -> dict[str, Any]:
-        """Execute an authenticated request against the localized Cookidoo API, retrying once on 401."""
+        """Execute an authenticated request against the localized Cookidoo API, retrying once on 401.
+
+        Non-2xx responses (except 401, which triggers a relogin retry) are
+        returned intact — the caller inspects ``status`` and ``body`` to
+        diagnose 4xx/5xx. This is intentional for the raw escape hatch, where
+        the response body of a 400 is often the whole diagnostic signal.
+        """
         api = await self.api()
         try:
-            return await self._do_raw_request(api, method, path, body, query)
+            return await self._do_raw_request(api, method, path, body, query, headers)
         except aiohttp.ClientResponseError as exc:
             if exc.status != 401:
                 raise
             api = await self._relogin()
-            return await self._do_raw_request(api, method, path, body, query)
+            return await self._do_raw_request(api, method, path, body, query, headers)
 
     async def close(self) -> None:
         if self._session and not self._session.closed:
