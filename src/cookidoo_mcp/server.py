@@ -405,6 +405,83 @@ async def cookidoo_http_request(
     )
 
 
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def edit_custom_recipe(
+    recipe_id: str,
+    name: str,
+    ingredients: list[str],
+    instructions: list[str],
+    hints: list[str] | None = None,
+    servings: int = 4,
+    prep_time_minutes: int = 10,
+    total_time_minutes: int = 30,
+    confirmed: bool = False,
+) -> dict[str, Any]:
+    """Edit an existing custom (user-created) Cookidoo recipe.
+
+    All fields are replaced on every call — this is a full-body PATCH, not a
+    partial update.  Only custom recipes (26-char ULIDs like
+    ``01KTZV61YS0WT7BXVZJQWYS2JF``) can be edited; stock catalog recipes
+    (``r``-prefixed IDs) are read-only.
+
+    Per-step ingredient weights should be embedded in each instruction string
+    (e.g. ``"Sear — 600 g arctic char, 2 tbsp olive oil: Pat fillets dry…"``).
+    The ``ingredients`` list is still required — it feeds the Cookidoo shopping
+    cart.
+
+    Args:
+        recipe_id: The custom recipe ULID to update.
+        name: Recipe name.
+        ingredients: Flat list of ingredient strings with quantities.
+        instructions: Flat list of step strings (embed weights in each step).
+        hints: Optional tips appended as a hints block (shown below steps in
+            the Cookidoo app).
+        servings: Number of servings (default 4).
+        prep_time_minutes: Active / prep time in minutes (default 10).
+        total_time_minutes: Total time including passive time, in minutes (default 30).
+        confirmed: Must be true after explicit user approval.
+    """
+    _require_confirmed(confirmed)
+    if not _is_custom_recipe_id(recipe_id):
+        raise ValueError(
+            f"{recipe_id!r} looks like a stock recipe ID — only custom ULIDs can be edited."
+        )
+    api = await _client.api()
+    language = api._cfg.localization.language
+    path = f"created-recipes/{language}/{recipe_id}"
+    body: dict[str, Any] = {
+        "name": name,
+        "image": None,
+        "isImageOwnedByUser": False,
+        "tools": [],
+        "yield": {"value": servings, "unitText": "portion"},
+        "prepTime": prep_time_minutes * 60,
+        "cookTime": 0,
+        "totalTime": total_time_minutes * 60,
+        "ingredients": [{"type": "INGREDIENT", "text": ing} for ing in ingredients],
+        "instructions": [{"type": "STEP", "text": step} for step in instructions],
+        "hints": "\n".join(hints) if hints else "",
+        "workStatus": "PRIVATE",
+        "recipeMetadata": {"requiresAnnotationsCheck": False},
+    }
+    result = await _client.raw_request("PATCH", path, body=body)
+    if result.get("status") != 200:
+        raise RuntimeError(f"edit_custom_recipe PATCH failed: {result}")
+    url = f"https://cookidoo.international/created-recipes/{language}/{recipe_id}"
+    return {
+        "success": True,
+        "recipe_id": recipe_id,
+        "url": url,
+        "name": name,
+        "servings": servings,
+        "prep_time_minutes": prep_time_minutes,
+        "total_time_minutes": total_time_minutes,
+        "ingredient_count": len(ingredients),
+        "step_count": len(instructions),
+        "hint_count": len(hints) if hints else 0,
+    }
+
+
 # ---------------------------------------------------------------------------
 # Backwards-compatible tools
 # ---------------------------------------------------------------------------
