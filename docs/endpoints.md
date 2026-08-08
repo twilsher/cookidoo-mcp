@@ -227,17 +227,33 @@ transclude/partial paths once a user is logged in. Specifically still unknown:
 3. **Shopping list**: GET (`/shopping/{lang}`), and the add/remove/clear write endpoints.
 4. **Custom recipe full data**: the GET shape for `01K...` ULIDs when
    authenticated. Probably JSON-LD like stock recipes, but confirm.
-5. **Custom recipe CRUD**: **CONFIRMED WORKING 2026-06-06** (window 14, reverse-engineered from alexandrepa-mcp-cookidoo).
+5. **Custom recipe CRUD**: **CONFIRMED WORKING 2026-06-06** (window 14, reverse-engineered from alexandrepa-mcp-cookidoo). **PATCH body shape confirmed 2026-08-08.**
    - **Step 1** — POST `{base_url}/created-recipes/{locale}` with `{"recipeName": "<name>"}` → returns blank recipe with ULID.
-   - **Step 2** — PATCH `{base_url}/created-recipes/{locale}/{recipe_id}` with full detail body:
-     - `name`: string
-     - `ingredients`: `[{type: "ingredient", text: "..."}]` — flat text lines, NOT a name/description split
-     - `instructions`: `[{type: "instruction", text: "..."}]`
-     - `yield`: object (servings)
-     - times in **seconds** (alexandrepa-mcp-cookidoo converts at API boundary)
-   - Confirmed live: ULID `01KTECKZHEN6EE20HF7WH8E9RC` (Pan-Seared Cod with Lemon Butter) created 2026-06-06.
-   - Auth note: Bearer token in their source; in our session, cookies-based auth via the existing MCP passthrough works.
-   - **Gap closed for M4**. Still capture in M1 pass 2 to confirm full request/response shapes.
+   - **Step 2** — PATCH `{base_url}/created-recipes/{locale}/{recipe_id}` with full detail body (ALL fields required — partial patches return 400):
+     ```json
+     {
+       "name": "...",
+       "image": null,
+       "isImageOwnedByUser": false,
+       "tools": [],
+       "yield": {"value": 4, "unitText": "portion"},
+       "prepTime": 600,
+       "cookTime": 0,
+       "totalTime": 1800,
+       "ingredients": [{"type": "INGREDIENT", "text": "..."}],
+       "instructions": [{"type": "STEP", "text": "..."}],
+       "hints": "hint 1\nhint 2",
+       "workStatus": "PRIVATE",
+       "recipeMetadata": {"requiresAnnotationsCheck": false}
+     }
+     ```
+     - `type` values are **uppercase**: `"INGREDIENT"` and `"STEP"` (NOT `"ingredient"` / `"instruction"`)
+     - Times in **seconds** (not ISO 8601 durations)
+     - `hints` is a **single newline-joined string** (not an array)
+     - `image: null` is accepted; server substitutes the placeholder SVG
+   - Confirmed live: ULID `01KTECKZHEN6EE20HF7WH8E9RC` (Pan-Seared Cod) created 2026-06-06; `01KTZV61YS0WT7BXVZJQWYS2JF` (Arctic Char) edited 2026-08-08.
+   - Auth note: cookies-based auth via the existing MCP passthrough works (no Bearer token needed).
+   - **Gap closed for M4**.
 6. **Token exchange**: full CIAM OAuth2 flow including the
    `ciam.prod.cookidoo.vorwerk-digital.com` `x-unknown` call. Need full HAR
    through the login redirect chain.
