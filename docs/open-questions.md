@@ -30,7 +30,9 @@ track down as the client matures.
    key). Refresh strategy: re-scrape from the page each session. Confirm exact
    cadence by observing across multiple rotations.
 
-6. **Shopping list — per-item freeform add** — `add_to_shopping_list` is
-   recipe-scoped only (adds all ingredients for a recipe). The web app UI
-   allows typing individual freeform items — there's likely a separate endpoint
-   for that. Still unmapped; capture when next touching the shopping list surface.
+6. **Shopping list — per-item freeform add** — RESOLVED 2026-08-11.
+   Endpoint: `POST shopping/{language}/additional-items/add` with body
+   `{"itemsValue": ["item1", "item2", ...]}`. SDK exposes it as
+   `cookidoo.add_additional_items(names: list[str])`. Confirmed working
+   via `cookidoo_http_request` (used to add "makrut lime leaves").
+   TODO: expose as first-class MCP tool `add_additional_shopping_items(items)`.
