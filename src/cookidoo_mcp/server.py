@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import re
 from datetime import date, datetime, timedelta
 from enum import StrEnum
@@ -457,6 +458,31 @@ async def edit_custom_recipe(
         raise ValueError(
             f"{recipe_id!r} looks like a stock recipe ID — only custom ULIDs can be edited."
         )
+    return await _patch_custom_recipe(
+        recipe_id=recipe_id,
+        name=name,
+        ingredients=ingredients,
+        instructions=instructions,
+        hints=hints,
+        servings=servings,
+        prep_time_minutes=prep_time_minutes,
+        total_time_minutes=total_time_minutes,
+        op_label="edit_custom_recipe",
+    )
+
+
+async def _patch_custom_recipe(
+    *,
+    recipe_id: str,
+    name: str,
+    ingredients: list[str],
+    instructions: list[str],
+    hints: list[str] | None,
+    servings: int,
+    prep_time_minutes: int,
+    total_time_minutes: int,
+    op_label: str,
+) -> dict[str, Any]:
     api = await _client.api()
     language = api._cfg.localization.language
     path = f"created-recipes/{language}/{recipe_id}"
@@ -477,7 +503,7 @@ async def edit_custom_recipe(
     }
     result = await _client.raw_request("PATCH", path, body=body)
     if result.get("status") != 200:
-        raise RuntimeError(f"edit_custom_recipe PATCH failed: {result}")
+        raise RuntimeError(f"{op_label} PATCH failed: {result}")
     url = f"https://cookidoo.international/created-recipes/{language}/{recipe_id}"
     return {
         "success": True,
@@ -491,6 +517,67 @@ async def edit_custom_recipe(
         "step_count": len(instructions),
         "hint_count": len(hints) if hints else 0,
     }
+
+
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def create_custom_recipe(
+    name: str,
+    ingredients: list[str],
+    instructions: list[str],
+    hints: list[str] | None = None,
+    servings: int = 4,
+    prep_time_minutes: int = 10,
+    total_time_minutes: int = 30,
+    confirmed: bool = False,
+) -> dict[str, Any]:
+    """Create a new custom (user-created) Cookidoo recipe.
+
+    Two-step API dance under the hood: POST ``created-recipes/{lang}`` with
+    just the name to mint a ULID, then PATCH the full body onto it. Returns
+    the same envelope as ``edit_custom_recipe`` — including the new ULID as
+    ``recipe_id`` and the recipe URL — so callers can immediately schedule
+    it via ``add_to_calendar``.
+
+    Per-step ingredient weights should be embedded in each instruction string
+    (e.g. ``"Sear — 600 g arctic char, 2 tbsp olive oil: Pat fillets dry…"``).
+    The ``ingredients`` list is still required — it feeds the Cookidoo shopping
+    cart.
+
+    Args:
+        name: Recipe name.
+        ingredients: Flat list of ingredient strings with quantities.
+        instructions: Flat list of step strings (embed weights in each step).
+        hints: Optional tips appended as a hints block (shown below steps).
+        servings: Number of servings (default 4).
+        prep_time_minutes: Active / prep time in minutes (default 10).
+        total_time_minutes: Total time including passive time, in minutes (default 30).
+        confirmed: Must be true after explicit user approval.
+    """
+    _require_confirmed(confirmed)
+    api = await _client.api()
+    language = api._cfg.localization.language
+    stub_path = f"created-recipes/{language}"
+    stub = await _client.raw_request("POST", stub_path, body={"recipeName": name})
+    if stub.get("status") != 200:
+        raise RuntimeError(f"create_custom_recipe POST failed: {stub}")
+    stub_body = stub.get("body") or {}
+    if isinstance(stub_body, str):
+        # Server occasionally returns JSON as a string body — decode defensively.
+        stub_body = json.loads(stub_body)
+    recipe_id = stub_body.get("recipeId")
+    if not recipe_id:
+        raise RuntimeError(f"create_custom_recipe: POST returned no recipeId: {stub}")
+    return await _patch_custom_recipe(
+        recipe_id=recipe_id,
+        name=name,
+        ingredients=ingredients,
+        instructions=instructions,
+        hints=hints,
+        servings=servings,
+        prep_time_minutes=prep_time_minutes,
+        total_time_minutes=total_time_minutes,
+        op_label="create_custom_recipe",
+    )
 
 
 # ---------------------------------------------------------------------------
