@@ -656,6 +656,50 @@ async def clear_shopping_list(confirmed: bool = False) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------
+# Additional shopping-list items (ad-hoc, not tied to a recipe)
+# ---------------------------------------------------------------------------
+
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
+async def get_additional_items() -> list[dict[str, Any]]:
+    """Get ad-hoc additional shopping-list items (items not tied to a recipe)."""
+    items = await _client.call(lambda api: api.get_additional_items())
+    return [_format_shopping_item(item) for item in items]
+
+
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def add_additional_items(
+    item_names: list[str], confirmed: bool = False
+) -> list[dict[str, Any]]:
+    """Add ad-hoc items to the shopping list (not tied to a recipe).
+
+    Args:
+        item_names: List of free-form item strings (e.g. "4 kg poteter, små gule").
+            The Cookidoo shopping list has no separate quantity field for
+            additional items — embed the quantity in the name.
+        confirmed: Must be true after explicit user approval.
+    """
+    _require_confirmed(confirmed)
+    items = await _client.call(lambda api: api.add_additional_items(item_names))
+    return [_format_shopping_item(item) for item in items]
+
+
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def remove_additional_items(
+    item_ids: list[str], confirmed: bool = False
+) -> dict[str, str]:
+    """Remove ad-hoc additional shopping-list items by id.
+
+    Args:
+        item_ids: List of additional-item IDs to remove (get IDs via
+            `get_additional_items`).
+        confirmed: Must be true after explicit user approval.
+    """
+    _require_confirmed(confirmed)
+    await _client.call(lambda api: api.remove_additional_items(item_ids))
+    return {"status": "ok", "removed": str(len(item_ids))}
+
+
+# ---------------------------------------------------------------------------
 # Priority 3 — Meal Calendar
 # ---------------------------------------------------------------------------
 
