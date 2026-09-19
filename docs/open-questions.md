@@ -30,9 +30,20 @@ track down as the client matures.
    key). Refresh strategy: re-scrape from the page each session. Confirm exact
    cadence by observing across multiple rotations.
 
-6. **Shopping list — per-item freeform add** — RESOLVED 2026-08-11.
+6. **Shopping list — per-item freeform add** — RESOLVED 2026-09-19.
    Endpoint: `POST shopping/{language}/additional-items/add` with body
    `{"itemsValue": ["item1", "item2", ...]}`. SDK exposes it as
-   `cookidoo.add_additional_items(names: list[str])`. Confirmed working
-   via `cookidoo_http_request` (used to add "makrut lime leaves").
-   TODO: expose as first-class MCP tool `add_additional_shopping_items(items)`.
+   `cookidoo.add_additional_items(names: list[str])`. Wrapped as
+   first-class MCP tool in commit `899ce7e`.
+
+7. **Custom-recipe calendar DELETE** — SDK's
+   `remove_custom_recipe_from_calendar` sends
+   `DELETE planning/{lang}/api/my-day/{day}/recipes/{ulid}?recipeSource=CUSTOMER`
+   and returns 400 Bad Request. Probed variants: `recipeSource=CUSTOM` → 500,
+   `recipeSource=customer` → 500, omit the param → 400. Empirical from
+   2026-08-06 with the upgraded `cookidoo_http_request` that surfaces non-2xx
+   bodies — the 400 body itself was not inspected in that session, worth
+   revisiting since the tool now surfaces it. Impact: `remove_from_calendar`
+   MCP tool is broken for custom-recipe ULIDs. Workaround: none (browser-drive
+   capture of a real delete-from-my-week in the web UI is the next diagnostic
+   step, but was blocked on manual Cookidoo login 2026-08-06).
