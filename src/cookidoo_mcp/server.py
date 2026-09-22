@@ -162,10 +162,13 @@ def _format_ingredient(ingredient: Any) -> dict[str, Any]:
 
 
 def _format_shopping_item(item: Any) -> dict[str, Any]:
+    # CookidooAdditionalItem (ad-hoc items) has no .description attribute,
+    # only CookidooIngredientItem does.
+    description = getattr(item, "description", "")
     return {
         "id": item.id,
         "name": _sanitize(item.name),
-        "description": _sanitize(item.description),
+        "description": _sanitize(description),
         "is_owned": item.is_owned,
     }
 
