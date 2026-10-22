@@ -47,3 +47,22 @@ track down as the client matures.
    MCP tool is broken for custom-recipe ULIDs. Workaround: none (browser-drive
    capture of a real delete-from-my-week in the web UI is the next diagnostic
    step, but was blocked on manual Cookidoo login 2026-08-06).
+
+8. **Bookmarks endpoint discovery** — meal-planning (window 0:12) asked
+   2026-10-16 for a programmatic way to list "bookmarked" recipes
+   (distinct from the 17 custom lists at `organize/{language}/api/custom-list`).
+   A page-route template `/organize/{lang}/transclude/manage-bookmark/{recipeId}`
+   exists in `actionLinkTemplates` (service `tmde2:organize`), which strongly
+   implies a distinct bookmark concept, but the underlying JSON endpoint is
+   unmapped. Prior failed probes (from `endpoints.md` §7): `GET
+   community/en/api/favourites` (auth error), `GET favourites/en` (404),
+   `POST community/en/api/recipes/{id}/bookmark` (405), `GET
+   community/en/bookmarks` (404). Next probe matrix (needs live MCP auth):
+   `organize/en/api/bookmark[s]`, `organize/en/api/manage-bookmark`,
+   `organize/en/api/bookmarked-recipes`, each with Accept
+   `application/vnd.vorwerk.organize.<name>.mobile+json`; also fetch the
+   transclude HTML at `organize/en/transclude/manage-bookmark/r292456` and
+   inspect for the real POST URL. If all JSON probes fail, browser-drive HAR
+   capture of a heart-icon click is the fallback (planned step in
+   `endpoints.md:273-293`). Once mapped, expose `list_bookmarks()`,
+   `bookmark_recipe()`, `unbookmark_recipe()` MCP tools.
