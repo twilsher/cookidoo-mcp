@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import os
 from typing import Any
 
@@ -87,6 +88,9 @@ class CookidooClient:
     def __init__(self) -> None:
         self._api: Cookidoo | None = None
         self._session: aiohttp.ClientSession | None = None
+        # Concurrent tool calls (asyncio.gather) must not log in twice: a failed
+        # login closes self._session, which the other login is still using.
+        self._auth_lock = asyncio.Lock()
 
     @classmethod
     def get(cls) -> "CookidooClient":
@@ -98,7 +102,12 @@ class CookidooClient:
         """Return an authenticated Cookidoo instance, logging in on first use."""
         if self._api is not None:
             return self._api
+        async with self._auth_lock:
+            if self._api is not None:
+                return self._api
+            return await self._login_locked()
 
+    async def _login_locked(self) -> Cookidoo:
         email = os.environ.get("COOKIDOO_EMAIL", "")
         password = os.environ.get("COOKIDOO_PASSWORD", "")
         locale_key = os.environ.get("COOKIDOO_LOCALE", "en-US")
@@ -114,17 +123,20 @@ class CookidooClient:
         # The browser OAuth2 flow follows redirects across cookidoo.<tld>,
         # the CIAM authorization server, and login-srv; aiohttp's default
         # CookieJar rejects cross-domain cookies, so we need unsafe=True.
-        self._session = aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(unsafe=True))
-        self._api = Cookidoo(self._session, cfg)
+        # Publish self._api only after login succeeds. A concurrent caller that
+        # sees a half-initialised client gets a 401, runs _relogin(), and closes
+        # the session this login is still using ("Connector is closed").
+        session = aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(unsafe=True))
+        api = Cookidoo(session, cfg)
         try:
-            await self._api.login()
+            await api.login()
         except Exception:
-            await self.close()
-            self._api = None
-            self._session = None
+            await session.close()
             raise
 
-        return self._api
+        self._session = session
+        self._api = api
+        return api
 
     async def api(self) -> Cookidoo:
         """Get an authenticated Cookidoo API instance."""
