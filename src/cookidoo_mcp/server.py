@@ -189,6 +189,39 @@ async def _get_raw_recipe(recipe_id: str) -> dict[str, Any]:
     return body
 
 
+# Pulls the per-recipe AggregateRating JSON-LD block out of the recipe page HTML.
+# The catalogue JSON endpoint has no rating; the rating widget is rendered
+# server-side into the page HTML. The first AggregateRating-only placeholder
+# carries no numbers — we need the second, with ratingValue + reviewCount.
+_RATING_JSONLD_RE = re.compile(
+    r'"@type"\s*:\s*"AggregateRating"[^{}]*?"ratingValue"\s*:\s*([0-9.]+)[^{}]*?"reviewCount"\s*:\s*(\d+)',
+    re.DOTALL,
+)
+
+
+async def _fetch_rating(recipe_id: str) -> tuple[float | None, int | None]:
+    """Return (rating, rating_count) for a stock recipe, or (None, None) on miss."""
+    try:
+        api = await _client.api()
+        raw = await _client.raw_request(
+            "GET",
+            _recipe_path(api.localization.language, recipe_id),
+            headers={"Accept": "text/html"},
+        )
+    except Exception:
+        return None, None
+    body = raw.get("body")
+    if not isinstance(body, str):
+        return None, None
+    m = _RATING_JSONLD_RE.search(body)
+    if not m:
+        return None, None
+    try:
+        return float(m.group(1)), int(m.group(2))
+    except (TypeError, ValueError):
+        return None, None
+
+
 def _format_steps(raw_recipe: dict[str, Any]) -> list[dict[str, Any]]:
     steps: list[dict[str, Any]] = []
     for group_index, group in enumerate(raw_recipe.get("recipeStepGroups", []), start=1):
@@ -220,6 +253,8 @@ async def _get_custom_recipe_payload(recipe_id: str) -> dict[str, Any]:
         "ingredients": [_sanitize(i) for i in recipe.ingredients],
         "instructions": [_sanitize(i) for i in recipe.instructions],
         "tools": [_sanitize(t) for t in recipe.tools],
+        "rating": None,
+        "rating_count": None,
         "is_custom": True,
     }
 
@@ -227,8 +262,11 @@ async def _get_custom_recipe_payload(recipe_id: str) -> dict[str, Any]:
 async def _get_recipe_payload(recipe_id: str) -> dict[str, Any]:
     if _is_custom_recipe_id(recipe_id):
         return await _get_custom_recipe_payload(recipe_id)
-    details = await _client.call(lambda api: api.get_recipe_details(recipe_id))
-    raw_recipe = await _get_raw_recipe(recipe_id)
+    details, raw_recipe, (rating, rating_count) = await asyncio.gather(
+        _client.call(lambda api: api.get_recipe_details(recipe_id)),
+        _get_raw_recipe(recipe_id),
+        _fetch_rating(recipe_id),
+    )
     return {
         "id": details.id,
         "name": _sanitize(details.name),
@@ -271,6 +309,8 @@ async def _get_recipe_payload(recipe_id: str) -> dict[str, Any]:
             for ng in details.nutrition_groups
         ],
         "steps": _format_steps(raw_recipe),
+        "rating": rating,
+        "rating_count": rating_count,
     }
 
 
@@ -307,12 +347,16 @@ async def cookidoo_search_recipes(
             thumbnail, _image = _pick_image(assets)
             total_time = item.get("totalTime") or item.get("total_time")
             recipe_url = f"{base_url}/recipes/recipe/{lang}/{recipe_id}"
+            rating = item.get("rating")
+            rating_count = item.get("numberOfRatings")
             results.append({
                 "id": recipe_id,
                 "name": name,
                 "url": recipe_url,
                 "total_time_seconds": total_time,
                 "thumbnail": thumbnail,
+                "rating": float(rating) if rating is not None else None,
+                "rating_count": int(rating_count) if rating_count is not None else None,
             })
         return results
 
