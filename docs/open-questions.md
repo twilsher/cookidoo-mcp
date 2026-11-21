@@ -36,17 +36,22 @@ track down as the client matures.
    `cookidoo.add_additional_items(names: list[str])`. Wrapped as
    first-class MCP tool in commit `899ce7e`.
 
-7. **Custom-recipe calendar DELETE** — SDK's
-   `remove_custom_recipe_from_calendar` sends
-   `DELETE planning/{lang}/api/my-day/{day}/recipes/{ulid}?recipeSource=CUSTOMER`
-   and returns 400 Bad Request. Probed variants: `recipeSource=CUSTOM` → 500,
-   `recipeSource=customer` → 500, omit the param → 400. Empirical from
-   2026-08-06 with the upgraded `cookidoo_http_request` that surfaces non-2xx
-   bodies — the 400 body itself was not inspected in that session, worth
-   revisiting since the tool now surfaces it. Impact: `remove_from_calendar`
-   MCP tool is broken for custom-recipe ULIDs. Workaround: none (browser-drive
-   capture of a real delete-from-my-week in the web UI is the next diagnostic
-   step, but was blocked on manual Cookidoo login 2026-08-06).
+7. **Custom-recipe calendar DELETE** — RESOLVED 2026-11-21. The HTTP
+   endpoint works: `DELETE planning/{lang}/api/my-day/{day}/recipes/{ulid}?recipeSource=CUSTOMER`
+   returns 200 with body `{"message":"Recipe was removed","content":null,"code":null}`.
+   Matrix (re-probed 2026-11-21 against a throwaway ULID on 2026-11-28):
+   - `recipeSource=CUSTOMER` → 200, recipe removed.
+   - omit param → 400, body `{"code":"E003","message":"Recipe has already been deleted for this day"}`.
+   - `recipeSource=CUSTOM` → 500, generic "Something went wrong".
+   The 2026-08-06 "CUSTOMER → 400" finding was stale (likely Cookidoo-side fix
+   between then and now). The remaining failure mode was an SDK bug: the SDK's
+   `remove_custom_recipe_from_calendar` parses `(await r.json())["content"]`
+   but the body has `content: null`, raising `'NoneType' object is not
+   subscriptable` even though the server-side delete succeeded. Fix: our MCP
+   `remove_from_calendar` tool bypasses the SDK for custom-recipe IDs and
+   hits the endpoint via `raw_request` (commit hash: see repo log after this
+   doc update). Upstream SDK bug still present in miaucl's cookidoo-api
+   new-auth branch — worth filing.
 
 8. **Bookmarks endpoint discovery** — meal-planning (window 0:12) asked
    2026-10-16 for a programmatic way to list "bookmarked" recipes
