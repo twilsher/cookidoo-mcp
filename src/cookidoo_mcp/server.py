@@ -860,26 +860,24 @@ async def remove_from_calendar(
     """
     _require_confirmed(confirmed)
     target = _parse_date(date)
-    if _is_custom_recipe_id(recipe_id):
-        # The SDK's remove_custom_recipe_from_calendar parses the response as
-        # cookidoo_calendar_day_from_json(resp["content"]), but the real DELETE
-        # response is {"message":"Recipe was removed","content":null,...} — so
-        # the parser raises "'NoneType' object is not subscriptable" even
-        # though the server-side delete succeeds. Bypass the SDK and hit the
-        # endpoint directly; a 200 means the recipe is gone.
-        api = await _client.api()
-        language = api.localization.language
-        resp = await _client.raw_request(
-            "DELETE",
-            f"planning/{language}/api/my-day/{target.isoformat()}/recipes/{recipe_id}",
-            query={"recipeSource": "CUSTOMER"},
+    # Both SDK remove methods (stock + custom) parse (await r.json())["content"]
+    # but the real DELETE response carries content=null (sometimes just a
+    # {"message":"Recipe was removed","content":null,code:null} envelope),
+    # raising "'NoneType' object is not subscriptable" even though the
+    # server-side delete succeeded. Bypass the SDK for both paths. Custom
+    # recipes require ?recipeSource=CUSTOMER; stock omits it.
+    api = await _client.api()
+    language = api.localization.language
+    query = {"recipeSource": "CUSTOMER"} if _is_custom_recipe_id(recipe_id) else None
+    resp = await _client.raw_request(
+        "DELETE",
+        f"planning/{language}/api/my-day/{target.isoformat()}/recipes/{recipe_id}",
+        query=query,
+    )
+    if resp["status"] >= 400:
+        raise RuntimeError(
+            f"Recipe DELETE failed: {resp['status']} {resp['body']}"
         )
-        if resp["status"] >= 400:
-            raise RuntimeError(
-                f"Custom recipe DELETE failed: {resp['status']} {resp['body']}"
-            )
-    else:
-        await _client.call(lambda api, t=target, r=recipe_id: api.remove_recipe_from_calendar(t, r))
 
     day = await _read_back_day(target)
     still_present = recipe_id in {r["id"] for r in day["recipes"]}
