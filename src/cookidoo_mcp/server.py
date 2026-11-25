@@ -37,6 +37,7 @@ class HttpMethod(StrEnum):
     GET = "GET"
     POST = "POST"
     PATCH = "PATCH"
+    PUT = "PUT"
     DELETE = "DELETE"
 
 # ---------------------------------------------------------------------------
@@ -376,6 +377,112 @@ async def cookidoo_get_recipe(recipe_id: str) -> dict[str, Any]:
         recipe_id: The Cookidoo recipe ID.
     """
     return await _get_recipe_payload(recipe_id)
+
+
+def _recipe_note_path(language: str, recipe_id: str) -> str:
+    return f"recipe-notes/{language}/recipes/{recipe_id}"
+
+
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
+async def get_recipe_note(recipe_id: str) -> dict[str, Any]:
+    """Get the user's private note on a stock Cookidoo recipe.
+
+    Returns ``{"recipe_id": ..., "text": None}`` when no note exists, or
+    ``{"recipe_id": ..., "text": ..., "note_id": ..., "created_at": ...,
+    "modified_at": ...}`` when one does. Notes are per-user and only
+    visible to the account that created them. Works on stock (`r`-prefixed)
+    recipe IDs; custom recipes (ULIDs) have no separate notes surface.
+
+    Args:
+        recipe_id: Stock Cookidoo recipe ID (e.g. ``r919978``).
+    """
+    api = await _client.api()
+    resp = await _client.raw_request(
+        "GET", _recipe_note_path(api.localization.language, recipe_id)
+    )
+    if resp["status"] == 204 or not resp["body"]:
+        return {"recipe_id": recipe_id, "text": None}
+    body = resp["body"]
+    return {
+        "recipe_id": recipe_id,
+        "text": _sanitize(body.get("text") or ""),
+        "note_id": body.get("noteId"),
+        "created_at": body.get("createdAt"),
+        "modified_at": body.get("modifiedAt"),
+    }
+
+
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def set_recipe_note(
+    recipe_id: str, text: str, confirmed: bool = False
+) -> dict[str, Any]:
+    """Create or update the user's private note on a stock Cookidoo recipe.
+
+    Idempotent: if a note already exists for the recipe, this replaces it
+    (PUT); otherwise a new note is created (POST). Max 1000 characters
+    (enforced server-side).
+
+    Args:
+        recipe_id: Stock Cookidoo recipe ID (e.g. ``r919978``).
+        text: Note text, up to 1000 characters.
+        confirmed: Must be true after explicit user approval.
+    """
+    _require_confirmed(confirmed)
+    api = await _client.api()
+    language = api.localization.language
+    existing = await _client.raw_request(
+        "GET", _recipe_note_path(language, recipe_id)
+    )
+    if existing["status"] == 200 and existing["body"]:
+        resp = await _client.raw_request(
+            "PUT",
+            _recipe_note_path(language, recipe_id),
+            body={"text": text},
+        )
+    else:
+        resp = await _client.raw_request(
+            "POST",
+            f"recipe-notes/{language}/recipes",
+            body={"recipeId": recipe_id, "text": text},
+        )
+    if resp["status"] >= 400:
+        raise RuntimeError(
+            f"Recipe note write failed: {resp['status']} {resp['body']}"
+        )
+    body = resp["body"] or {}
+    return {
+        "success": True,
+        "recipe_id": recipe_id,
+        "text": _sanitize(body.get("text") or text),
+        "note_id": body.get("noteId"),
+        "created_at": body.get("createdAt"),
+        "modified_at": body.get("modifiedAt"),
+    }
+
+
+@mcp.tool(annotations=MUTATION_TOOL_ANNOTATIONS)
+async def delete_recipe_note(
+    recipe_id: str, confirmed: bool = False
+) -> dict[str, Any]:
+    """Delete the user's private note on a stock Cookidoo recipe.
+
+    Returns success even if no note existed (idempotent — deleting a
+    nonexistent note returns 204 or 404, both reported as success).
+
+    Args:
+        recipe_id: Stock Cookidoo recipe ID (e.g. ``r919978``).
+        confirmed: Must be true after explicit user approval.
+    """
+    _require_confirmed(confirmed)
+    api = await _client.api()
+    resp = await _client.raw_request(
+        "DELETE", _recipe_note_path(api.localization.language, recipe_id)
+    )
+    if resp["status"] not in (200, 204, 404):
+        raise RuntimeError(
+            f"Recipe note delete failed: {resp['status']} {resp['body']}"
+        )
+    return {"success": True, "recipe_id": recipe_id}
 
 
 @mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
